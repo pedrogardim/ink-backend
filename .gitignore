@@ -2,3 +2,4 @@ node_modules/
 dist/
 
 tatto_studio.db
+.env
