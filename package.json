@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon --exec ts-node src/index.ts"
   },
   "repository": {
     "type": "git",
@@ -15,5 +16,9 @@
   "bugs": {
     "url": "https://github.com/pedrogardim/tattoo-studio-booking-express-api/issues"
   },
-  "homepage": "https://github.com/pedrogardim/tattoo-studio-booking-express-api#readme"
+  "homepage": "https://github.com/pedrogardim/tattoo-studio-booking-express-api#readme",
+  "devDependencies": {
+    "nodemon": "^3.0.1",
+    "ts-node": "^10.9.1"
+  }
 }
