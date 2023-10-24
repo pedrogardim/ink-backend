@@ -1,7 +1,8 @@
 import express from "express";
-import { AppDataSource } from "./config/db";
 
 require("dotenv").config();
+
+import { AppDataSource } from "./config/db";
 
 const app = express();
 
