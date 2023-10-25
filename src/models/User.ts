@@ -7,7 +7,11 @@ import {
   PrimaryGeneratedColumn,
   CreateDateColumn,
   UpdateDateColumn,
+  OneToMany,
+  JoinColumn,
 } from "typeorm";
+
+import { Appointment } from "./Appointment";
 
 @Entity("users")
 export class User extends BaseEntity {
@@ -47,6 +51,14 @@ export class User extends BaseEntity {
     default: "client",
   })
   role: UserRoleType;
+
+  @OneToMany(() => Appointment, (appointment) => appointment.client)
+  @JoinColumn({ name: "client_id" })
+  clientAppointments: Appointment[];
+
+  @OneToMany(() => Appointment, (appointment) => appointment.tattooist)
+  @JoinColumn({ name: "tattooist_id" })
+  tattooistAppointments: Appointment[];
 
   @CreateDateColumn()
   created_at: Date;
