@@ -4,6 +4,7 @@ import { Appointment } from "../models/Appointment";
 import { CreateUsersTable1698242505641 } from "../migrations/1698242505641-CreateUsersTable";
 import { CreateAppointmentsTable1698243116264 } from "../migrations/1698243116264-CreateAppointmentsTable";
 import { TattooWork } from "../models/TattoWork";
+import { CreateTattooWorksTable1698245446743 } from "../migrations/1698245446743-CreateTattooWorksTable";
 
 require("dotenv").config();
 
@@ -20,5 +21,6 @@ export const AppDataSource = new DataSource({
   migrations: [
     CreateUsersTable1698242505641,
     CreateAppointmentsTable1698243116264,
+    CreateTattooWorksTable1698245446743,
   ],
 });

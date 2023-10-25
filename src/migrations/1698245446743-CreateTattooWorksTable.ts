@@ -1,7 +1,7 @@
 import { MigrationInterface, QueryRunner } from "typeorm";
 
-export class CreateTattooWorksTable1698245283985 implements MigrationInterface {
-    name = 'CreateTattooWorksTable1698245283985'
+export class CreateTattooWorksTable1698245446743 implements MigrationInterface {
+    name = 'CreateTattooWorksTable1698245446743'
 
     public async up(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.query(`
@@ -9,7 +9,7 @@ export class CreateTattooWorksTable1698245283985 implements MigrationInterface {
                 \`id\` int NOT NULL AUTO_INCREMENT,
                 \`description\` varchar(256) NOT NULL,
                 \`image_url\` varchar(2000) NULL,
-                \`role\` enum ('tatto', 'piercing') NOT NULL DEFAULT 'tattoo',
+                \`type\` enum ('tattoo', 'piercing') NOT NULL DEFAULT 'tattoo',
                 \`created_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
                 \`updated_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
                 \`tattooist_id\` int NULL,
