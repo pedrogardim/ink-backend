@@ -1,5 +1,6 @@
 import { DataSource } from "typeorm";
 import { User } from "../models/User";
+import { Appointment } from "../models/Appointment";
 
 require("dotenv").config();
 
@@ -12,5 +13,5 @@ export const AppDataSource = new DataSource({
   port: +(MYSQL_PORT as string),
   username: MYSQL_USERNAME,
   password: MYSQL_PASSWORD,
-  entities: [User],
+  entities: [User, Appointment],
 });
