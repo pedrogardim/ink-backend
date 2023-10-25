@@ -7,8 +7,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "tsc && node dist/index.js",
     "dev": "nodemon --exec ts-node src/index.ts",
-    "migration:generate": "typeorm-ts-node-esm migration:generate -d ./src/config/db.ts -p",
-    "migration:run": "typeorm-ts-node-esm migration:run -d ./src/config/db.ts"
+    "migration:generate": "typeorm-ts-node-esm migration:generate -d ./src/db/index.ts -p",
+    "migration:run": "typeorm-ts-node-esm migration:run -d ./src/db/index.ts"
   },
   "repository": {
     "type": "git",
