@@ -1,4 +1,4 @@
-export type TattooWorkType = "tatto" | "piercing";
+export type TattooWorkType = "tattoo" | "piercing";
 
 import {
   BaseEntity,
@@ -33,10 +33,10 @@ export class TattooWork extends BaseEntity {
 
   @Column({
     type: "enum",
-    enum: ["tatto", "piercing"],
+    enum: ["tattoo", "piercing"],
     default: "tattoo",
   })
-  role: TattooWorkType;
+  type: TattooWorkType;
 
   @CreateDateColumn()
   created_at: Date;
