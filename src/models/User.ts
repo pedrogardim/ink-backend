@@ -12,6 +12,7 @@ import {
 } from "typeorm";
 
 import { Appointment } from "./Appointment";
+import { TattooWork } from "./TattoWork";
 
 @Entity("users")
 export class User extends BaseEntity {
@@ -59,6 +60,10 @@ export class User extends BaseEntity {
   @OneToMany(() => Appointment, (appointment) => appointment.tattooist)
   @JoinColumn({ name: "tattooist_id" })
   tattooistAppointments: Appointment[];
+
+  @OneToMany(() => TattooWork, (tattoo_works) => tattoo_works.tattooist)
+  @JoinColumn({ name: "tattooist_id" })
+  works: TattooWork[];
 
   @CreateDateColumn()
   created_at: Date;
