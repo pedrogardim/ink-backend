@@ -3,6 +3,7 @@ import { User } from "../models/User";
 import { Appointment } from "../models/Appointment";
 import { CreateUsersTable1698242505641 } from "../migrations/1698242505641-CreateUsersTable";
 import { CreateAppointmentsTable1698243116264 } from "../migrations/1698243116264-CreateAppointmentsTable";
+import { TattooWork } from "../models/TattoWork";
 
 require("dotenv").config();
 
@@ -15,7 +16,7 @@ export const AppDataSource = new DataSource({
   port: +(MYSQL_PORT as string),
   username: MYSQL_USERNAME,
   password: MYSQL_PASSWORD,
-  entities: [User, Appointment],
+  entities: [User, Appointment, TattooWork],
   migrations: [
     CreateUsersTable1698242505641,
     CreateAppointmentsTable1698243116264,
