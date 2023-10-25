@@ -21,6 +21,7 @@
   },
   "homepage": "https://github.com/pedrogardim/tattoo-studio-booking-express-api#readme",
   "devDependencies": {
+    "@faker-js/faker": "^8.2.0",
     "@types/express": "^4.17.20",
     "@types/node": "^20.8.8",
     "nodemon": "^3.0.1",
