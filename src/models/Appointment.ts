@@ -33,9 +33,9 @@ export class Appointment extends BaseEntity {
   @Column({
     type: "enum",
     enum: ["tattoo", "piercing"],
-    default: "client",
+    default: "tattoo",
   })
-  role: AppointmentType;
+  type: AppointmentType;
 
   @ManyToOne(() => User, (user) => user.clientAppointments)
   @JoinColumn({ name: "client_id" })
