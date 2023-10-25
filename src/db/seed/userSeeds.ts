@@ -26,4 +26,6 @@ export const seedUsers = async () => {
   users[users.length - 1].last_name = "";
 
   await User.save(users);
+
+  return users;
 };
