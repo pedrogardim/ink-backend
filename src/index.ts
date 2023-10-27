@@ -4,6 +4,7 @@ require("dotenv").config();
 
 import { AppDataSource } from "./db";
 import authRouter from "./routes/authRoutes";
+import docsRouter from "./routes/docsRoutes";
 
 import { errorHandler } from "./middleware/errorHandler";
 
@@ -12,6 +13,7 @@ const app = express();
 app.use(express.json());
 
 app.use("/api/auth", authRouter);
+app.use("/docs", docsRouter);
 
 app.get("/", (req, res) => {
   return res.json("Hi");
