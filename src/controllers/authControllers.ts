@@ -24,8 +24,6 @@ export const register: Handler = async (req, res) => {
     expiresIn: "1h",
   });
 
-  delete user.password;
-
   res.status(201).json({
     data: {
       kind: "authentication",
