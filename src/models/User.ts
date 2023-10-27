@@ -32,19 +32,23 @@ export class User extends BaseEntity {
 
   @Column({
     length: 50,
+    name: "first_name",
   })
-  first_name: string;
+  firstName: string;
 
   @Column({
     length: 50,
+    name: "last_name",
   })
-  last_name: string;
+  lastName: string;
 
-  @Column()
-  phone_number: number;
+  @Column({
+    name: "phone_number",
+  })
+  phoneNumber: number;
 
-  @Column({ nullable: true, length: 2000 })
-  profile_pic_url: string;
+  @Column({ nullable: true, length: 2000, name: "profile_pic_url" })
+  profilePicUrl: string;
 
   @Column({
     type: "enum",
@@ -65,9 +69,13 @@ export class User extends BaseEntity {
   @JoinColumn({ name: "tattooist_id" })
   works: TattooWork[];
 
-  @CreateDateColumn()
-  created_at: Date;
+  @CreateDateColumn({
+    name: "created_at",
+  })
+  createdAt: Date;
 
-  @UpdateDateColumn()
-  updated_at: Date;
+  @UpdateDateColumn({
+    name: "updated_at",
+  })
+  updatedAt: Date;
 }
