@@ -7,15 +7,16 @@ import {
   deleteUser,
 } from "../controllers/usersControllers";
 import { asyncWrapper } from "../utils/wrappers";
+import { roleCheck } from "../middleware/roleCheck";
 
 const router = express.Router();
 
 //Admin CRUD
-router.get("/", asyncWrapper(getUsers));
-router.get("/:id", asyncWrapper(getUserById));
-router.post("/", asyncWrapper(createUser));
-router.put("/:id", asyncWrapper(updateUser));
-router.delete("/:id", asyncWrapper(deleteUser));
+router.get("/", roleCheck("super_admin"), asyncWrapper(getUsers));
+router.get("/:id", roleCheck("super_admin"), asyncWrapper(getUserById));
+router.post("/", roleCheck("super_admin"), asyncWrapper(createUser));
+router.put("/:id", roleCheck("super_admin"), asyncWrapper(updateUser));
+router.delete("/:id", roleCheck("super_admin"), asyncWrapper(deleteUser));
 
 //User
 router.get("/me", asyncWrapper(getUsers));
