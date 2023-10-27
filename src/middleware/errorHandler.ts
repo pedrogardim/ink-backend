@@ -1,7 +1,5 @@
 import { ErrorRequestHandler } from "express";
 
-import { Response } from "express";
-
 const typeOrmErrorsMap = {
   ER_DUP_ENTRY: 409,
   ECONNRESET: 503,
@@ -16,7 +14,7 @@ export const formatErrorCode = (
 };
 
 export const errorHandler: ErrorRequestHandler = (err, req, res, next) => {
-  console.error(err.stack);
+  console.error(err);
   const formatedCode = formatErrorCode(err.code);
   res.status(formatedCode).json({
     error: {
