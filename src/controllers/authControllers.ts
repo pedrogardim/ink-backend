@@ -17,6 +17,7 @@ export const register: Handler = async (req, res) => {
 
   const user = await User.create({
     ...req.body,
+    role: "client",
     password: encryptedPassword,
   }).save();
 
