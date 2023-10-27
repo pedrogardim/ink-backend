@@ -7,6 +7,7 @@ import authRouter from "./routes/authRoutes";
 import docsRouter from "./routes/docsRoutes";
 
 import { errorHandler } from "./middleware/errorHandler";
+import { auth } from "./middleware/auth";
 
 const app = express();
 
@@ -15,7 +16,7 @@ app.use(express.json());
 app.use("/api/auth", authRouter);
 app.use("/docs", docsRouter);
 
-app.get("/", (req, res) => {
+app.get("/", auth, (req, res) => {
   return res.json("Hi");
 });
 
