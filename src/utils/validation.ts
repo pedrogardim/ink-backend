@@ -1,4 +1,4 @@
-import { RegisterPayload } from "../types/auth";
+import { LoginPayload, RegisterPayload } from "../types/auth";
 
 const NAME_REGEX = /^[a-zA-Z]+$/;
 const EMAIL_REGEX = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
@@ -52,5 +52,18 @@ export const validateRegistrationData = (data: RegisterPayload) => {
     }
   }
 
+  return true;
+};
+
+export const validateLogin = (data: LoginPayload) => {
+  for (const field of ["email", "password"]) {
+    const key = field as keyof LoginPayload;
+    if (!data[key]) {
+      throw {
+        message: `${validationRules[key].formated} can't be empty`,
+        code: 400,
+      };
+    }
+  }
   return true;
 };
