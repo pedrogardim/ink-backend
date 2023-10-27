@@ -4,7 +4,7 @@ import { Handler } from "express";
 import { validateLogin, validateRegistrationData } from "../utils/validation";
 import { LoginPayload, RegisterPayload } from "../types/auth";
 import { User } from "../models/User";
-import { getBaseUrl } from "../utils/format";
+import { formatUser } from "../utils/format";
 
 //errors are handled by async wrapper and error middleware!
 
@@ -31,12 +31,7 @@ export const register: Handler = async (req, res) => {
       token,
       tokenIat: new Date(),
       tokenExp: new Date(Date.now() + 1000 * 60 * 60),
-      user: {
-        kind: "user",
-        self: `${getBaseUrl(req)}/users/${user.id}`,
-        ...user,
-        password: undefined,
-      },
+      user: formatUser(user, req),
     },
   });
 };
@@ -66,12 +61,7 @@ export const login: Handler = async (req, res) => {
       token,
       tokenIat: new Date(),
       tokenExp: new Date(Date.now() + 1000 * 60 * 60),
-      user: {
-        kind: "user",
-        self: `${getBaseUrl(req)}/users/${user.id}`,
-        ...user,
-        password: undefined,
-      },
+      user: formatUser(user, req),
     },
   });
 };
