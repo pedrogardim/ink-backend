@@ -1,19 +1,151 @@
-swagger: "2.0"
+openapi: "3.0.0"
 info:
-  title: Sample API
-  description: API description in Markdown.
-  version: 1.0.0
+  title: Tatto Studio API
+  description: A API made in Express to manage appointments on a tattoo. Features auth system with JWT, form validation.
+  version: 0.0.1
+  contact:
+    name: Pedro Gardim
+    url: https://pedrogardim.com
+    email: me@pedrogardim.com
 host: api.example.com
-basePath: /v1
 schemes:
-  - https
+  - http
+servers:
+  - url: "http://localhost:3000/api"
 paths:
-  /users:
-    get:
-      summary: Returns a list of users.
-      description: Optional extended description in Markdown.
+  /auth/register:
+    post:
+      tags:
+        - Authentication
+      summary: Registers a new user
+      description: To register new users, both for tattooists and clients. Returns JWT and created user info.
       produces:
         - application/json
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RegisterPayload"
       responses:
         200:
-          description: OK
+          description: A single user.
+          content:
+            application/json:
+              application/json:
+              schema:
+                $ref: "#/components/schemas/AuthenticationResponse"
+  /auth/login:
+    post:
+      tags:
+        - Authentication
+      summary: Logins a new user
+      description: To login new users, both for tattooists and clients. Returns JWT and user info.
+      produces:
+        - application/json
+      requestBody:
+        description: Optional description in *Markdown*
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LoginPayload"
+      responses:
+        200:
+          description: A single user.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AuthenticationResponse"
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        kind:
+          type: string
+          example: "user"
+        self:
+          type: string
+          format: uri
+          example: "http://localhost:3000/api/users/203"
+        email:
+          type: string
+          format: email
+          example: "new@user.com"
+        firstName:
+          type: string
+          example: "John"
+        lastName:
+          type: string
+          example: "Doe"
+        phoneNumber:
+          type: integer
+          example: 678293783
+        profilePicUrl:
+          type: string
+          nullable: true
+        id:
+          type: integer
+          example: 203
+        role:
+          type: string
+          example: "client"
+        createdAt:
+          type: string
+          format: date-time
+          example: "2023-10-27T06:44:16.976Z"
+        updatedAt:
+          type: string
+          format: date-time
+          example: "2023-10-27T06:44:16.976Z"
+    AuthenticationResponse:
+      type: object
+      properties:
+        data:
+          type: object
+          properties:
+            kind:
+              type: string
+              example: "authentication"
+            token:
+              type: string
+              format: jwt
+              example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+            tokenIat:
+              type: string
+              format: date-time
+              example: "2023-10-27T08:44:16.998Z"
+            tokenExp:
+              type: string
+              format: date-time
+              example: "2023-10-27T09:44:16.998Z"
+            user:
+              $ref: "#/components/schemas/User"
+    RegisterPayload:
+      type: object
+      properties:
+        firstName:
+          type: string
+          default: "John"
+        lastName:
+          type: string
+          default: "Doe"
+        phoneNumber:
+          type: number
+          default: 678293783
+        email:
+          type: string
+          default: "new@user.com"
+        password:
+          type: string
+          default: "abc12345"
+    LoginPayload:
+      type: object
+      properties:
+        email:
+          type: string
+          default: "admin@admin.com"
+        password:
+          type: string
+          default: "1234"
