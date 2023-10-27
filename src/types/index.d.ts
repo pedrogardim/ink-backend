@@ -1,6 +1,6 @@
 export {};
 
-interface CurrentUserData {
+export interface CurrentUserData {
   id: number;
   role: string;
 }
