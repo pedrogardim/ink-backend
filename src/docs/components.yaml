@@ -90,3 +90,8 @@ components:
         password:
           type: string
           default: "1234"
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

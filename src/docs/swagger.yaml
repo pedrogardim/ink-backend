@@ -12,6 +12,8 @@ schemes:
   - http
 servers:
   - url: "http://localhost:3000/api"
+security:
+  - bearerAuth: []
 paths:
   /auth/register:
     post:
