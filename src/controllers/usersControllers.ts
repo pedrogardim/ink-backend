@@ -1,13 +1,17 @@
 import { Handler } from "express";
+import bcrypt from "bcrypt";
 import { User } from "../models/User";
 import { formatPaginationResponse, formatUser } from "../utils/format";
+import {
+  validateRegistrationData,
+  validateUserUpdateData,
+} from "../utils/validation";
+import { AppDataSource } from "../db";
 
 //Admin CRUD
 export const getUserById: Handler = async (req, res) => {
   const user = await User.findOneBy({ id: parseInt(req.params.id) });
-  if (!user) {
-    throw { code: 404, message: "User not found" };
-  }
+  if (!user) throw { code: 404, message: "User not found" };
   res.status(200).json({ data: formatUser(user, req) });
 };
 
@@ -34,19 +38,36 @@ export const getUsers: Handler = async (req, res) => {
 };
 
 export const createUser: Handler = async (req, res) => {
-  res.status(200).json("ok");
+  validateRegistrationData(req.body);
+  const encryptedPassword = await bcrypt.hash(req.body.password, 10);
+  const createdUser = await User.create({
+    ...req.body,
+    password: encryptedPassword,
+  }).save();
+  res.status(201).json({ data: formatUser(createdUser, req) });
 };
 
 export const updateUser: Handler = async (req, res) => {
-  res.status(200).json("ok");
+  validateUserUpdateData(req.body);
+  const userRepository = AppDataSource.getRepository(User);
+  let user = await userRepository.findOneBy({ id: parseInt(req.params.id) });
+  if (!user) throw { code: 404, message: "User not found" };
+  user = { ...user, ...req.body };
+  res.status(200).json({ data: formatUser(user as User, req) });
 };
 
 export const deleteUser: Handler = async (req, res) => {
-  res.status(200).json("ok");
+  const userDeleted = await User.delete({ id: parseInt(req.params.id) });
+  if (!userDeleted.affected) throw { code: 404, message: "User not found" };
+  res.status(204).json(userDeleted);
 };
 
 export const setAsTattoist: Handler = async (req, res) => {
-  res.status(200).json("ok");
+  const userRepository = AppDataSource.getRepository(User);
+  let user = await userRepository.findOneBy({ id: parseInt(req.params.id) });
+  if (!user) throw { code: 404, message: "User not found" };
+  user.role = "tattooist";
+  res.status(200).json({ data: formatUser(user as User, req) });
 };
 
 //User
