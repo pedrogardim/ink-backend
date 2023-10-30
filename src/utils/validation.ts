@@ -38,18 +38,17 @@ export const validateRegistrationData = (data: RegisterPayload) => {
   for (const fields of Object.keys(validationRules)) {
     const key = fields as keyof RegisterPayload;
     const rule = validationRules[key];
-    if (!data[key]) {
+    if (!data[key])
       throw {
         message: `${rule.formated} can't be empty`,
         code: 400,
       };
-    }
-    if (!rule.regex.test(data[key])) {
+
+    if (!rule.regex.test(data[key]))
       throw {
         message: `${rule.formated} is not valid`,
         code: 400,
       };
-    }
   }
 
   return true;
@@ -58,12 +57,35 @@ export const validateRegistrationData = (data: RegisterPayload) => {
 export const validateLogin = (data: LoginPayload) => {
   for (const field of ["email", "password"]) {
     const key = field as keyof LoginPayload;
-    if (!data[key]) {
+    if (!data[key])
       throw {
         message: `${validationRules[key].formated} can't be empty`,
         code: 400,
       };
-    }
   }
+  return true;
+};
+
+export const validateUserUpdateData = (data: RegisterPayload) => {
+  for (const fields of Object.keys(data)) {
+    const key = fields as keyof RegisterPayload;
+    const rule = validationRules[key];
+    if (!rule)
+      throw {
+        message: `Field '${key}' can't be inserted into user`,
+        code: 400,
+      };
+    if (!data[key])
+      throw {
+        message: `${rule.formated} can't be empty`,
+        code: 400,
+      };
+    if (!rule.regex.test(data[key]))
+      throw {
+        message: `${rule.formated} is not valid`,
+        code: 400,
+      };
+  }
+
   return true;
 };
