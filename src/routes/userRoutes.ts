@@ -6,6 +6,9 @@ import {
   updateUser,
   deleteUser,
   setAsTattoist,
+  getMyProfile,
+  updateMyProfile,
+  deleteMyProfile,
 } from "../controllers/usersControllers";
 import { asyncWrapper } from "../utils/wrappers";
 import { roleCheck } from "../middleware/roleCheck";
@@ -24,9 +27,9 @@ adminRouter.delete("/:id", asyncWrapper(deleteUser));
 adminRouter.put("/setAsTattooist/:id", asyncWrapper(setAsTattoist));
 
 //User
-router.get("/me", asyncWrapper(getUsers));
-router.put("/me", asyncWrapper(updateUser));
-router.delete("/me", asyncWrapper(deleteUser));
+router.get("/me", asyncWrapper(getMyProfile));
+router.put("/me", asyncWrapper(updateMyProfile));
+router.delete("/me", asyncWrapper(deleteMyProfile));
 
 router.use("/", adminRouter);
 
