@@ -27,7 +27,7 @@ export class TattooWork extends BaseEntity {
   @Column({ nullable: true, length: 2000 })
   image_url: string;
 
-  @ManyToOne(() => User, (user) => user.works)
+  @ManyToOne(() => User, (user) => user.works, { onDelete: "CASCADE" })
   @JoinColumn({ name: "tattooist_id" })
   tattooist: User;
 

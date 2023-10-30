@@ -1,0 +1,138 @@
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        kind:
+          type: string
+          example: "user"
+        self:
+          type: string
+          format: uri
+          example: "http://localhost:3000/api/users/203"
+        email:
+          type: string
+          format: email
+          example: "new@user.com"
+        firstName:
+          type: string
+          example: "John"
+        lastName:
+          type: string
+          example: "Doe"
+        phoneNumber:
+          type: integer
+          example: 678293783
+        profilePicUrl:
+          type: string
+          nullable: true
+        id:
+          type: integer
+          example: 203
+        role:
+          type: string
+          example: "client"
+        createdAt:
+          type: string
+          format: date-time
+          example: "2023-10-27T06:44:16.976Z"
+        updatedAt:
+          type: string
+          format: date-time
+          example: "2023-10-27T06:44:16.976Z"
+    UserDataWrapper:
+      type: object
+      properties:
+        data:
+          $ref: "#/components/schemas/User"
+    AuthenticationResponse:
+      type: object
+      properties:
+        data:
+          type: object
+          properties:
+            kind:
+              type: string
+              example: "authentication"
+            token:
+              type: string
+              format: jwt
+              example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+            tokenIat:
+              type: string
+              format: date-time
+              example: "2023-10-27T08:44:16.998Z"
+            tokenExp:
+              type: string
+              format: date-time
+              example: "2023-10-27T09:44:16.998Z"
+            user:
+              $ref: "#/components/schemas/User"
+    RegisterPayload:
+      type: object
+      properties:
+        firstName:
+          type: string
+          default: "John"
+        lastName:
+          type: string
+          default: "Doe"
+        phoneNumber:
+          type: number
+          default: 678293783
+        email:
+          type: string
+          default: "new@user.com"
+        password:
+          type: string
+          default: "abc12345"
+    LoginPayload:
+      type: object
+      properties:
+        email:
+          type: string
+          default: "admin@admin.com"
+        password:
+          type: string
+          default: "1234"
+    Pagination:
+      type: object
+      properties:
+        kind:
+          type: string
+          default: "user"
+        currentItemCount:
+          type: integer
+          default: 10
+        itemsPerPage:
+          type: integer
+          default: 10
+        startIndex:
+          type: integer
+          default: 1
+        totalItems:
+          type: integer
+          default: 202
+        self:
+          type: string
+          format: uri
+          default: "http://localhost:3000/api/users/?page=2"
+        next:
+          type: string
+          format: uri
+          default: "http://localhost:3000/api/users/?page=3"
+        previous:
+          type: string
+          format: uri
+          default: "http://localhost:3000/api/users/?page=1"
+        pageIndex:
+          type: integer
+          default: 1
+        totalPages:
+          type: integer
+          default: 21
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

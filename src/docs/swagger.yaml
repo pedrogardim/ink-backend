@@ -1,0 +1,206 @@
+openapi: "3.0.0"
+info:
+  title: Tatto Studio API
+  description: A API made in Express to manage appointments on a tattoo. Features auth system with JWT, form validation.
+  version: 0.0.1
+  contact:
+    name: Pedro Gardim
+    url: https://pedrogardim.com
+    email: me@pedrogardim.com
+host: api.example.com
+schemes:
+  - http
+servers:
+  - url: "http://localhost:3000/api"
+security:
+  - bearerAuth: []
+paths:
+  /auth/register:
+    post:
+      tags:
+        - Authentication
+      summary: Registers a new user
+      description: To register new users, both for tattooists and clients. Returns JWT and created user info.
+      produces:
+        - application/json
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RegisterPayload"
+      responses:
+        201:
+          description: Retuns JWT and created user info.
+          content:
+            application/json:
+              application/json:
+              schema:
+                $ref: "#/components/schemas/AuthenticationResponse"
+  /auth/login:
+    post:
+      tags:
+        - Authentication
+      summary: Logins a new user
+      description: To login new users, both for tattooists and clients. Returns JWT and user info.
+      produces:
+        - application/json
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LoginPayload"
+      responses:
+        200:
+          description: Returns JWT and user info.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AuthenticationResponse"
+  /users/:
+    get:
+      tags:
+        - Users
+      summary: List all users.
+      description: For admin. Returns all users using pagination
+      produces:
+        - application/json
+      parameters:
+        - in: query
+          name: page
+          schema:
+            type: integer
+          required: false
+          description: Index of the page.
+        - in: query
+          name: pageSize
+          schema:
+            type: integer
+          required: false
+          description: Number of items to return each page
+      responses:
+        200:
+          description: Returns users.
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/Pagination"
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          items:
+                            type: array
+                            items:
+                              $ref: "#/components/schemas/User"
+    post:
+      tags:
+        - Users
+      summary: Create a new user
+      description: For admin. Creates a new user.
+      produces:
+        - application/json
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RegisterPayload"
+      responses:
+        201:
+          description: Retuns created user info.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserDataWrapper"
+  /users/{id}:
+    get:
+      tags:
+        - Users
+      summary: Retrieve a user by ID.
+      description: For admin. Retrieves an user by ID
+      produces:
+        - application/json
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+          description: ID of user to get.
+      responses:
+        200:
+          description: Returns user.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserDataWrapper"
+    put:
+      tags:
+        - Users
+      summary: Update a user by ID.
+      description: For admin. Update an user info by ID
+      produces:
+        - application/json
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+          description: ID of user to get.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RegisterPayload"
+      responses:
+        200:
+          description: Returns updated user info.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserDataWrapper"
+    delete:
+      tags:
+        - Users
+      summary: Delete an user by ID.
+      description: For admin. Delete an user by ID
+      produces:
+        - application/json
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+          description: ID of user to get.
+      responses:
+        204:
+          description: Confirms the user whas deleted.
+  /users/setAsTattooist/{id}:
+    put:
+      tags:
+        - Users
+      summary: Set a registed user as tattooist.
+      description: For admin. In this API, a tattooist would have to register as a client first, an then the admin would set the user as a tattooist.
+      produces:
+        - application/json
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+          description: ID of user to get.
+      responses:
+        200:
+          description: Returns updated user info.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserDataWrapper"

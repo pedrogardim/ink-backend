@@ -4,16 +4,23 @@ require("dotenv").config();
 
 import { AppDataSource } from "./db";
 import authRouter from "./routes/authRoutes";
+import userRouter from "./routes/userRoutes";
+import docsRouter from "./routes/docsRoutes";
 
 import { errorHandler } from "./middleware/errorHandler";
+import { auth } from "./middleware/auth";
+import morgan from "morgan";
 
 const app = express();
 
 app.use(express.json());
+app.use(morgan("dev"));
 
 app.use("/api/auth", authRouter);
+app.use("/api/users", auth, userRouter);
+app.use("/docs", docsRouter);
 
-app.get("/", (req, res) => {
+app.get("/", auth, (req, res) => {
   return res.json("Hi");
 });
 
