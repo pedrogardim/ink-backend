@@ -57,15 +57,21 @@ export class User extends BaseEntity {
   })
   role: UserRoleType;
 
-  @OneToMany(() => Appointment, (appointment) => appointment.client)
+  @OneToMany(() => Appointment, (appointment) => appointment.client, {
+    onDelete: "CASCADE",
+  })
   @JoinColumn({ name: "client_id" })
   clientAppointments: Appointment[];
 
-  @OneToMany(() => Appointment, (appointment) => appointment.tattooist)
+  @OneToMany(() => Appointment, (appointment) => appointment.tattooist, {
+    onDelete: "CASCADE",
+  })
   @JoinColumn({ name: "tattooist_id" })
   tattooistAppointments: Appointment[];
 
-  @OneToMany(() => TattooWork, (tattoo_works) => tattoo_works.tattooist)
+  @OneToMany(() => TattooWork, (tattoo_works) => tattoo_works.tattooist, {
+    onDelete: "CASCADE",
+  })
   @JoinColumn({ name: "tattooist_id" })
   works: TattooWork[];
 

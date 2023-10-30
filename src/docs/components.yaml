@@ -40,6 +40,11 @@ components:
           type: string
           format: date-time
           example: "2023-10-27T06:44:16.976Z"
+    UserDataWrapper:
+      type: object
+      properties:
+        data:
+          $ref: "#/components/schemas/User"
     AuthenticationResponse:
       type: object
       properties:
@@ -90,3 +95,44 @@ components:
         password:
           type: string
           default: "1234"
+    Pagination:
+      type: object
+      properties:
+        kind:
+          type: string
+          default: "user"
+        currentItemCount:
+          type: integer
+          default: 10
+        itemsPerPage:
+          type: integer
+          default: 10
+        startIndex:
+          type: integer
+          default: 1
+        totalItems:
+          type: integer
+          default: 202
+        self:
+          type: string
+          format: uri
+          default: "http://localhost:3000/api/users/?page=2"
+        next:
+          type: string
+          format: uri
+          default: "http://localhost:3000/api/users/?page=3"
+        previous:
+          type: string
+          format: uri
+          default: "http://localhost:3000/api/users/?page=1"
+        pageIndex:
+          type: integer
+          default: 1
+        totalPages:
+          type: integer
+          default: 21
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

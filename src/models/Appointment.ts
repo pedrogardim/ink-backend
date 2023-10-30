@@ -37,11 +37,15 @@ export class Appointment extends BaseEntity {
   })
   type: AppointmentType;
 
-  @ManyToOne(() => User, (user) => user.clientAppointments)
+  @ManyToOne(() => User, (user) => user.clientAppointments, {
+    onDelete: "CASCADE",
+  })
   @JoinColumn({ name: "client_id" })
   client: User;
 
-  @ManyToOne(() => User, (user) => user.tattooistAppointments)
+  @ManyToOne(() => User, (user) => user.tattooistAppointments, {
+    onDelete: "CASCADE",
+  })
   @JoinColumn({ name: "tattooist_id" })
   tattooist: User;
 
