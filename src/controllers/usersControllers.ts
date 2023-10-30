@@ -73,13 +73,27 @@ export const setAsTattoist: Handler = async (req, res) => {
 //User
 
 export const getMyProfile: Handler = async (req, res) => {
-  res.status(200).json("ok");
+  const user = await User.findOneBy({ id: parseInt(req.currentUser.userId) });
+  console.log(req.currentUser);
+  if (!user) throw { code: 404, message: "User not found" };
+  res.status(200).json({ data: formatUser(user, req) });
 };
 
 export const updateMyProfile: Handler = async (req, res) => {
-  res.status(200).json("ok");
+  validateUserUpdateData(req.body);
+  const userRepository = AppDataSource.getRepository(User);
+  let user = await userRepository.findOneBy({
+    id: parseInt(req.currentUser.userId),
+  });
+  if (!user) throw { code: 404, message: "User not found" };
+  user = { ...user, ...req.body };
+  res.status(200).json({ data: formatUser(user as User, req) });
 };
 
 export const deleteMyProfile: Handler = async (req, res) => {
-  res.status(200).json("ok");
+  const userDeleted = await User.delete({
+    id: parseInt(req.currentUser.userId),
+  });
+  if (!userDeleted.affected) throw { code: 404, message: "User not found" };
+  res.status(204).json(userDeleted);
 };

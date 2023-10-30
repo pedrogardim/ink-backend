@@ -204,3 +204,48 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/UserDataWrapper"
+  /users/me:
+    get:
+      tags:
+        - Users
+      summary: Get auth user profile.
+      description: Get profile info from currently authenticated user, through JWT decoding.
+      produces:
+        - application/json
+      responses:
+        200:
+          description: Returns user info.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserDataWrapper"
+    put:
+      tags:
+        - Users
+      summary: Update auth user profile.
+      description: Get profile info from currently authenticated user, through JWT decoding.
+      produces:
+        - application/json
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RegisterPayload"
+      responses:
+        200:
+          description: Returns user info.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserDataWrapper"
+    delete:
+      tags:
+        - Users
+      summary: Delete auth user.
+      description: Delete the currentlu authenticated user, through JWT decoding.
+      produces:
+        - application/json
+      responses:
+        204:
+          description: Confirms the user whas deleted.
