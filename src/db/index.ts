@@ -5,6 +5,7 @@ import { CreateUsersTable1698242505641 } from "./migrations/1698242505641-Create
 import { CreateAppointmentsTable1698243116264 } from "./migrations/1698243116264-CreateAppointmentsTable";
 import { TattooWork } from "../models/TattoWork";
 import { CreateTattooWorksTable1698245446743 } from "./migrations/1698245446743-CreateTattooWorksTable";
+import { UpdateDeleteRules1698653355836 } from "./migrations/1698653355836-updateDeleteRules";
 
 require("dotenv").config();
 
@@ -22,5 +23,6 @@ export const AppDataSource = new DataSource({
     CreateUsersTable1698242505641,
     CreateAppointmentsTable1698243116264,
     CreateTattooWorksTable1698245446743,
+    UpdateDeleteRules1698653355836,
   ],
 });
