@@ -1,7 +1,7 @@
 export {};
 
 export interface CurrentUserData {
-  id: number;
+  userId: number;
   role: string;
 }
 
