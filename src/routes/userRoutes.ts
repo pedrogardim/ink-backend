@@ -5,6 +5,7 @@ import {
   createUser,
   updateUser,
   deleteUser,
+  setAsTattoist,
 } from "../controllers/usersControllers";
 import { asyncWrapper } from "../utils/wrappers";
 import { roleCheck } from "../middleware/roleCheck";
@@ -12,15 +13,21 @@ import { roleCheck } from "../middleware/roleCheck";
 const router = express.Router();
 
 //Admin CRUD
-router.get("/", roleCheck("super_admin"), asyncWrapper(getUsers));
-router.get("/:id", roleCheck("super_admin"), asyncWrapper(getUserById));
-router.post("/", roleCheck("super_admin"), asyncWrapper(createUser));
-router.put("/:id", roleCheck("super_admin"), asyncWrapper(updateUser));
-router.delete("/:id", roleCheck("super_admin"), asyncWrapper(deleteUser));
+const adminRouter = express.Router();
+adminRouter.use(roleCheck("super_admin"));
+
+adminRouter.get("/", asyncWrapper(getUsers));
+adminRouter.get("/:id", asyncWrapper(getUserById));
+adminRouter.post("/", asyncWrapper(createUser));
+adminRouter.put("/:id", asyncWrapper(updateUser));
+adminRouter.delete("/:id", asyncWrapper(deleteUser));
+adminRouter.put("/setAsTattooist/:id", asyncWrapper(setAsTattoist));
 
 //User
 router.get("/me", asyncWrapper(getUsers));
 router.put("/me", asyncWrapper(updateUser));
 router.delete("/me", asyncWrapper(deleteUser));
+
+router.use("/", adminRouter);
 
 export default router;
