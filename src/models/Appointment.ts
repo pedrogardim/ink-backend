@@ -24,11 +24,11 @@ export class Appointment extends BaseEntity {
   })
   description: string;
 
-  @Column()
-  start_time: Date;
+  @Column({ name: "start_time" })
+  startTime: Date;
 
-  @Column()
-  end_time: Date;
+  @Column({ name: "end_time" })
+  endTime: Date;
 
   @Column({
     type: "enum",
@@ -49,9 +49,9 @@ export class Appointment extends BaseEntity {
   @JoinColumn({ name: "tattooist_id" })
   tattooist: User;
 
-  @CreateDateColumn()
-  created_at: Date;
+  @CreateDateColumn({ name: "created_at" })
+  createdAt: Date;
 
-  @UpdateDateColumn()
+  @UpdateDateColumn({ name: "updated_at" })
   updated_at: Date;
 }
