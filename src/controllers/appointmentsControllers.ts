@@ -54,13 +54,22 @@ export const createAppointment: Handler = async (req, res) => {
 };
 
 export const updateAppointment: Handler = async (req, res) => {
-  await validateAppointment(req.body, true);
-  const appointmentRepository = AppDataSource.getRepository(Appointment);
-  let appointment = await appointmentRepository.findOneBy({
+  let appointment = await Appointment.findOneBy({
     id: parseInt(req.params.id),
   });
   if (!appointment) throw { code: 404, message: "Appointment not found" };
-  appointment = { ...appointment, ...req.body };
+
+  const { id, startTime, endTime, clientId, tattooistId } = appointment;
+
+  await validateAppointment(
+    { startTime, endTime, clientId, tattooistId, ...req.body },
+    true,
+    id
+  );
+
+  Object.assign(appointment, req.body);
+
+  await appointment.save();
   res
     .status(200)
     .json({ data: formatAppointment(appointment as Appointment, req) });
@@ -70,7 +79,9 @@ export const deleteAppointment: Handler = async (req, res) => {
   const appointmentDeleted = await Appointment.delete({
     id: parseInt(req.params.id),
   });
+
   if (!appointmentDeleted.affected)
     throw { code: 404, message: "Appointment not found" };
+  
   res.status(204).json(appointmentDeleted);
 };
