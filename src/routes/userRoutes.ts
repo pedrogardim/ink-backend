@@ -9,6 +9,7 @@ import {
   getMyProfile,
   updateMyProfile,
   deleteMyProfile,
+  getTattooists,
 } from "../controllers/usersControllers";
 import { asyncWrapper } from "../utils/wrappers";
 import { roleCheck } from "../middleware/roleCheck";
@@ -30,6 +31,8 @@ adminRouter.put("/setAsTattooist/:id", asyncWrapper(setAsTattoist));
 router.get("/me", asyncWrapper(getMyProfile));
 router.put("/me", asyncWrapper(updateMyProfile));
 router.delete("/me", asyncWrapper(deleteMyProfile));
+
+router.get("/getTattooists", asyncWrapper(getTattooists));
 
 router.use("/", adminRouter);
 

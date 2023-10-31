@@ -103,6 +103,44 @@ paths:
       responses:
         204:
           description: Confirms the user whas deleted.
+  /users/getTattooists:
+    get:
+      tags:
+        - Users
+      summary: List all tattooists.
+      description: For users to get all tattooists, and then pick one for creating a appointment.
+      produces:
+        - application/json
+      parameters:
+        - in: query
+          name: page
+          schema:
+            type: integer
+          required: false
+          description: Index of the page.
+        - in: query
+          name: pageSize
+          schema:
+            type: integer
+          required: false
+          description: Number of items to return each page
+      responses:
+        200:
+          description: Returns users.
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/Pagination"
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          items:
+                            type: array
+                            items:
+                              $ref: "#/components/schemas/User"
   /users/:
     get:
       tags:
