@@ -94,3 +94,25 @@ export const deleteMyProfile: Handler = async (req, res) => {
   if (!userDeleted.affected) throw { code: 404, message: "User not found" };
   res.status(204).json(userDeleted);
 };
+
+export const getTattooists: Handler = async (req, res) => {
+  let { pageSize = 10, page = 1 } = req.query;
+  pageSize = parseInt(pageSize as string);
+  page = parseInt(page as string);
+
+  const [users, totalItems] = await User.findAndCount({
+    where: { role: "tattooist" },
+    take: pageSize,
+    skip: (page - 1) * pageSize,
+  });
+
+  res.status(200).json(
+    formatPaginationResponse({
+      req,
+      page,
+      pageSize,
+      totalItems,
+      items: users.map((user) => formatUser(user, req)),
+    })
+  );
+};
