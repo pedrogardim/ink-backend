@@ -113,6 +113,24 @@ export const getMyAppointments: Handler = async (req, res) => {
   );
 };
 
+export const getMyAppointmentById: Handler = async (req, res) => {
+  const { userId, role } = req.currentUser;
+  const idToQuery = role === "tattooist" ? "tattooistId" : "clientId";
+
+  const appointment = await Appointment.findOne({
+    where: {
+      id: parseInt(req.params.id),
+      [idToQuery]: userId,
+    },
+    relations: {
+      client: role === "tattooist",
+      tattooist: role !== "tattooist",
+    },
+  });
+  if (!appointment) throw { code: 404, message: "Appointment not found" };
+  res.status(200).json({ data: formatAppointment(appointment, req) });
+};
+
 export const requestAppointment: Handler = async (req, res) => {
   const { userId, role } = req.currentUser;
   const { startTime, endTime, tattooistId } = req.body;
