@@ -9,6 +9,7 @@ import {
   getAppointments,
   updateAppointment,
   getMyAppointments,
+  getMyAppointmentById,
   requestAppointment,
   updateMyAppointment,
   deleteMyAppointment,
@@ -18,6 +19,7 @@ const router = express.Router();
 
 // User operations
 router.get("/my", asyncWrapper(getMyAppointments));
+router.get("/my/:id", asyncWrapper(getMyAppointmentById));
 router.post("/my", asyncWrapper(requestAppointment));
 router.put("/my/:id", asyncWrapper(updateMyAppointment));
 router.delete("/my/:id", asyncWrapper(deleteMyAppointment));
