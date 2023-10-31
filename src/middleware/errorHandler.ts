@@ -1,4 +1,5 @@
 import { ErrorRequestHandler } from "express";
+import { STATUS_CODES } from "http";
 
 const typeOrmErrorsMap = {
   ER_DUP_ENTRY: { message: "This element already exists", code: 409 },
@@ -14,6 +15,9 @@ export const errorHandler: ErrorRequestHandler = (err, req, res, next) => {
   if (Object.keys(typeOrmErrorsMap).includes(err.code)) {
     error = typeOrmErrorsMap[err.code as keyof typeof typeOrmErrorsMap];
   }
+  if (!error.code || typeof error.code !== "number") {
+    error.code = 500;
+  }
   const { message, code } = error;
-  res.status(code || 500).json({ error: { message, code } });
+  res.status(code).json({ error: { message, code } });
 };
