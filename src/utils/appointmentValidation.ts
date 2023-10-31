@@ -1,41 +1,55 @@
-import { MoreThanOrEqual, LessThanOrEqual } from "typeorm";
+import { MoreThanOrEqual, LessThanOrEqual, Not } from "typeorm";
 import { Appointment } from "../models/Appointment";
+import { User } from "../models/User";
 
 const INT_REGEX = /^-?\d+$/;
+const URL_REGEX =
+  /^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/;
+const DESC_REGEX = /^.{1,256}$/;
 
 type ValidationRules = {
   [key: string]: {
-    formated: string;
     validation: (data: any) => boolean;
+    required?: boolean;
   };
 };
 
 const validationRules: ValidationRules = {
   startTime: {
-    formated: "Start time",
     validation: (date) => !isNaN(Date.parse(date)),
+    required: true,
   },
   endTime: {
-    formated: "End time",
     validation: (date) => !isNaN(Date.parse(date)),
+    required: true,
   },
   clientId: {
-    formated: "Client ID",
     validation: (id) => INT_REGEX.test(id),
+    required: true,
   },
   tattooistId: {
-    formated: "Tattooist ID",
     validation: (id) => INT_REGEX.test(id),
+    required: true,
+  },
+  description: {
+    validation: (desc) => DESC_REGEX.test(desc) && typeof desc === "string",
+  },
+  imageUrl: {
+    validation: (url) => URL_REGEX.test(url),
+  },
+  type: {
+    validation: (type) => type === "tattoo" || type === "piercing",
   },
 };
 
 type AppointmentData = {
-  [key: keyof typeof validationRules]: string;
+  [key: keyof typeof validationRules]: string | number;
 };
 
 export const validateAppointment = async (
   appointmentData: AppointmentData,
-  isUpdating?: boolean
+  isUpdating?: boolean,
+  id?: number
 ) => {
   for (const field of Object.keys(
     isUpdating ? appointmentData : validationRules
@@ -47,15 +61,18 @@ export const validateAppointment = async (
         message: `Field '${key}' can't be inserted into an appointment`,
         code: 400,
       };
-    if (!appointmentData[key])
+    if (rule.required && !appointmentData[key] && appointmentData[key] !== 0)
       throw {
-        message: `${rule.formated} can't be empty`,
+        message: `Field '${field}' can't be empty`,
         code: 400,
       };
 
-    if (!rule.validation(appointmentData[key]))
+    if (
+      (appointmentData[key] || appointmentData[key] === 0) &&
+      !rule.validation(appointmentData[key])
+    )
       throw {
-        message: `${rule.formated} is not valid`,
+        message: `Field '${field}' is not valid`,
         code: 400,
       };
   }
@@ -74,9 +91,10 @@ export const validateAppointment = async (
     };
 
   const overlapingAppointments = await Appointment.count({
-    relations: ["tattooist", "client"],
+    relations: ["tattooist"],
     where: {
-      tattooistId: parseInt(appointmentData.tattooistId),
+      ...(isUpdating && { id: Not(id as number) }),
+      tattooistId: appointmentData.tattooistId as number,
       startTime: LessThanOrEqual(new Date(appointmentData.endTime)),
       endTime: MoreThanOrEqual(new Date(appointmentData.startTime)),
     },
