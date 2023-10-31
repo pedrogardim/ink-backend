@@ -1,4 +1,4 @@
-import { LoginPayload, RegisterPayload } from "../types/auth";
+import { LoginPayload } from "../types/auth";
 
 const NAME_REGEX = /^[a-zA-Z\u00C0-\u017F ]+$/;
 const EMAIL_REGEX = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
@@ -6,32 +6,37 @@ const PASSWORD_REGEX = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,20}$/;
 const PHONE_NUMBER_REGEX = /^[0-9]{9}$/;
 
 type ValidationRules = {
-  [key in keyof RegisterPayload]: {
+  [key: string]: {
     formated: string;
-    regex: RegExp;
+    validation: (data: any) => boolean;
   };
 };
+
 const validationRules: ValidationRules = {
   firstName: {
     formated: "First name",
-    regex: NAME_REGEX,
+    validation: (id) => NAME_REGEX.test(id),
   },
   lastName: {
     formated: "Last name",
-    regex: NAME_REGEX,
+    validation: (id) => NAME_REGEX.test(id),
   },
   email: {
     formated: "Email",
-    regex: EMAIL_REGEX,
+    validation: (id) => EMAIL_REGEX.test(id),
   },
   password: {
     formated: "Password",
-    regex: PASSWORD_REGEX,
+    validation: (id) => PASSWORD_REGEX.test(id),
   },
   phoneNumber: {
     formated: "Phone number",
-    regex: PHONE_NUMBER_REGEX,
+    validation: (id) => PHONE_NUMBER_REGEX.test(id),
   },
+};
+
+type RegisterPayload = {
+  [key: keyof typeof validationRules]: string;
 };
 
 export const validateRegistrationData = (data: RegisterPayload) => {
@@ -44,7 +49,7 @@ export const validateRegistrationData = (data: RegisterPayload) => {
         code: 400,
       };
 
-    if (!rule.regex.test(data[key]))
+    if (!rule.validation(data[key]))
       throw {
         message: `${rule.formated} is not valid`,
         code: 400,
@@ -80,7 +85,7 @@ export const validateUserUpdateData = (data: RegisterPayload) => {
         message: `${rule.formated} can't be empty`,
         code: 400,
       };
-    if (!rule.regex.test(data[key]))
+    if (!rule.validation(data[key]))
       throw {
         message: `${rule.formated} is not valid`,
         code: 400,

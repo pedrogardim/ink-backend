@@ -5,7 +5,7 @@ import {
   validateLogin,
   validateRegistrationData,
 } from "../utils/userValidation";
-import { LoginPayload, RegisterPayload } from "../types/auth";
+import { LoginPayload } from "../types/auth";
 import { User } from "../models/User";
 import { formatUser } from "../utils/format";
 
@@ -14,7 +14,7 @@ import { formatUser } from "../utils/format";
 const { JWT_SECRET = "" } = process.env;
 
 export const register: Handler = async (req, res) => {
-  validateRegistrationData(req.body as RegisterPayload);
+  validateRegistrationData(req.body);
 
   const encryptedPassword = await bcrypt.hash(req.body.password, 10);
 
