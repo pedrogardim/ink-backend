@@ -10,6 +10,8 @@ import {
   updateAppointment,
   getMyAppointments,
   requestAppointment,
+  updateMyAppointment,
+  deleteMyAppointment,
 } from "../controllers/appointmentsControllers";
 
 const router = express.Router();
@@ -17,6 +19,8 @@ const router = express.Router();
 // User operations
 router.get("/my", asyncWrapper(getMyAppointments));
 router.post("/my", asyncWrapper(requestAppointment));
+router.put("/my/:id", asyncWrapper(updateMyAppointment));
+router.delete("/my/:id", asyncWrapper(deleteMyAppointment));
 
 //Admin CRUD
 const adminRouter = express.Router();

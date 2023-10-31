@@ -138,3 +138,49 @@ export const requestAppointment: Handler = async (req, res) => {
     .status(200)
     .json({ data: formatAppointment(createdAppointment as Appointment, req) });
 };
+
+export const updateMyAppointment: Handler = async (req, res) => {
+  const { userId, role } = req.currentUser;
+  const idToQuery = role === "tattooist" ? "tattooistId" : "clientId";
+
+  let appointment = await Appointment.findOne({
+    where: {
+      id: parseInt(req.params.id),
+      [idToQuery]: userId,
+    },
+  });
+  if (!appointment) throw { code: 404, message: "Appointment not found" };
+
+  if (req.body.clientId)
+    throw { code: 400, message: "You can not change the client" };
+
+  const { id, startTime, endTime, clientId, tattooistId } = appointment;
+
+  await validateAppointment(
+    { startTime, endTime, clientId, tattooistId, ...req.body },
+    true,
+    id
+  );
+
+  Object.assign(appointment, req.body);
+
+  await appointment.save();
+  res
+    .status(200)
+    .json({ data: formatAppointment(appointment as Appointment, req) });
+};
+
+export const deleteMyAppointment: Handler = async (req, res) => {
+  const { userId, role } = req.currentUser;
+  const idToQuery = role === "tattooist" ? "tattooistId" : "clientId";
+
+  const appointmentDeleted = await Appointment.delete({
+    id: parseInt(req.params.id),
+    [idToQuery]: userId,
+  });
+
+  if (!appointmentDeleted.affected)
+    throw { code: 404, message: "Appointment not found" };
+
+  res.status(204).json(appointmentDeleted);
+};
