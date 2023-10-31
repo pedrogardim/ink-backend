@@ -26,8 +26,14 @@ export const formatAppointment = (appointment: Appointment, req: Request) => ({
     : undefined,
 });
 
-export const formatTattooWork = (appointment: TattooWork, req: Request) =>
-  appointment;
+export const formatTattooWork = (tattooWork: TattooWork, req: Request) => ({
+  kind: "tattooWork",
+  self: `${getBaseUrl(req)}/appointments/${tattooWork.id}`,
+  ...tattooWork,
+  tattooist: tattooWork.tattooist
+    ? formatUser(tattooWork.tattooist, req)
+    : undefined,
+});
 
 type FormatPaginationArguments = {
   req: Request;
