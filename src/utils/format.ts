@@ -1,6 +1,7 @@
 import { Request } from "express";
 import { User } from "../models/User";
 import { Appointment } from "../models/Appointment";
+import { TattooWork } from "../models/TattooWork";
 
 export const getBaseUrl = (req: Request) =>
   req.protocol + "://" + req.get("host") + "/api";
@@ -24,6 +25,9 @@ export const formatAppointment = (appointment: Appointment, req: Request) => ({
     ? formatUser(appointment.tattooist, req)
     : undefined,
 });
+
+export const formatTattooWork = (appointment: TattooWork, req: Request) =>
+  appointment;
 
 type FormatPaginationArguments = {
   req: Request;
