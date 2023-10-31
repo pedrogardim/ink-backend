@@ -59,6 +59,20 @@ export const validateAppointment = async (
         code: 400,
       };
   }
+
+  const tattooist = await User.findOne({
+    where: { id: appointmentData.tattooistId as number },
+    select: {
+      role: true,
+    },
+  });
+
+  if (tattooist && tattooist?.role !== "tattooist")
+    throw {
+      message: "Given tattooist is not a tattooist",
+      code: 422,
+    };
+
   const overlapingAppointments = await Appointment.count({
     relations: ["tattooist", "client"],
     where: {
