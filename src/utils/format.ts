@@ -60,7 +60,9 @@ export const formatPaginationResponse = ({
     next:
       page === Math.ceil(totalItems / pageSize)
         ? undefined
-        : getReqUrl(req).replace(`page=${page}`, `page=${page + 1}`),
+        : getReqUrl(req).includes("page=")
+        ? getReqUrl(req).replace(`page=${page}`, `page=${page + 1}`)
+        : getReqUrl(req) + "/?page=2",
     previous:
       page === 1
         ? undefined
