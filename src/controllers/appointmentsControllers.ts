@@ -1,6 +1,7 @@
 import { Handler } from "express";
 import { Appointment } from "../models/Appointment";
 import { formatPaginationResponse, formatAppointment } from "../utils/format";
+import { validateAppointment } from "../utils/appointmentValidation";
 import { AppDataSource } from "../db";
 
 //Admin CRUD
@@ -47,6 +48,7 @@ export const getAppointments: Handler = async (req, res) => {
 };
 
 export const createAppointment: Handler = async (req, res) => {
+  await validateAppointment(req.body);
   const createdAppointment = await Appointment.create(req.body).save();
 
   // res.status(201).json({ data: createdAppointment });
@@ -54,6 +56,7 @@ export const createAppointment: Handler = async (req, res) => {
 };
 
 export const updateAppointment: Handler = async (req, res) => {
+  await validateAppointment(req.body);
   const appointmentRepository = AppDataSource.getRepository(Appointment);
   let appointment = await appointmentRepository.findOneBy({
     id: parseInt(req.params.id),
