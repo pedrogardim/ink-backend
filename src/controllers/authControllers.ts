@@ -1,7 +1,10 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { Handler } from "express";
-import { validateLogin, validateRegistrationData } from "../utils/validation";
+import {
+  validateLogin,
+  validateRegistrationData,
+} from "../utils/userValidation";
 import { LoginPayload, RegisterPayload } from "../types/auth";
 import { User } from "../models/User";
 import { formatUser } from "../utils/format";

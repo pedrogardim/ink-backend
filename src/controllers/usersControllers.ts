@@ -5,7 +5,7 @@ import { formatPaginationResponse, formatUser } from "../utils/format";
 import {
   validateRegistrationData,
   validateUserUpdateData,
-} from "../utils/validation";
+} from "../utils/userValidation";
 import { AppDataSource } from "../db";
 
 //Admin CRUD
