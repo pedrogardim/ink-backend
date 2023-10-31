@@ -131,6 +131,109 @@ components:
         totalPages:
           type: integer
           default: 21
+    AppointmentPaginationResponse:
+      type: object
+      properties:
+        data:
+          $ref: "#/components/schemas/AppointmentDataPagination"
+    AppointmentDataPagination:
+      type: object
+      properties:
+        kind:
+          type: string
+          example: "appointment"
+        currentItemCount:
+          type: integer
+          example: 1
+        itemsPerPage:
+          type: integer
+          example: 10
+        startIndex:
+          type: integer
+          example: 1
+        totalItems:
+          type: integer
+          example: 1
+        self:
+          type: string
+          format: uri
+        pageIndex:
+          type: integer
+          example: 1
+        totalPages:
+          type: integer
+          example: 1
+        items:
+          type: array
+          items:
+            $ref: "#/components/schemas/AppointmentResponse"
+
+    AppointmentResponse:
+      type: object
+      properties:
+        data:
+          $ref: "#/components/schemas/AppointmentData"
+
+    AppointmentData:
+      type: object
+      properties:
+        kind:
+          type: string
+          example: "appointment"
+        self:
+          type: string
+          format: uri
+        id:
+          type: integer
+          example: 1
+        description:
+          type: string
+        startTime:
+          type: string
+          format: date-time
+        endTime:
+          type: string
+          format: date-time
+        clientId:
+          type: integer
+        tattooistId:
+          type: integer
+        type:
+          type: string
+          example: "tattoo"
+        createdAt:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+        client:
+          $ref: "#/components/schemas/User"
+        tattooist:
+          $ref: "#/components/schemas/User"
+    AppointmentPayload:
+      type: object
+      properties:
+        startTime:
+          type: string
+          format: date-time
+        endTime:
+          type: string
+          format: date-time
+        clientId:
+          type: integer
+        tattooistId:
+          type: integer
+        description:
+          type: string
+        type:
+          type: string
+
+    AppointmentUpdatePayload:
+      type: object
+      properties:
+        description:
+          type: string
   securitySchemes:
     bearerAuth:
       type: http

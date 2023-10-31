@@ -58,152 +58,6 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/AuthenticationResponse"
-  /users/:
-    get:
-      tags:
-        - Users
-      summary: List all users.
-      description: For admin. Returns all users using pagination
-      produces:
-        - application/json
-      parameters:
-        - in: query
-          name: page
-          schema:
-            type: integer
-          required: false
-          description: Index of the page.
-        - in: query
-          name: pageSize
-          schema:
-            type: integer
-          required: false
-          description: Number of items to return each page
-      responses:
-        200:
-          description: Returns users.
-          content:
-            application/json:
-              schema:
-                allOf:
-                  - $ref: "#/components/schemas/Pagination"
-                  - type: object
-                    properties:
-                      data:
-                        type: object
-                        properties:
-                          items:
-                            type: array
-                            items:
-                              $ref: "#/components/schemas/User"
-    post:
-      tags:
-        - Users
-      summary: Create a new user
-      description: For admin. Creates a new user.
-      produces:
-        - application/json
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/RegisterPayload"
-      responses:
-        201:
-          description: Retuns created user info.
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/UserDataWrapper"
-  /users/{id}:
-    get:
-      tags:
-        - Users
-      summary: Retrieve a user by ID.
-      description: For admin. Retrieves an user by ID
-      produces:
-        - application/json
-      parameters:
-        - in: path
-          name: id
-          schema:
-            type: integer
-          required: true
-          description: ID of user to get.
-      responses:
-        200:
-          description: Returns user.
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/UserDataWrapper"
-    put:
-      tags:
-        - Users
-      summary: Update a user by ID.
-      description: For admin. Update an user info by ID
-      produces:
-        - application/json
-      parameters:
-        - in: path
-          name: id
-          schema:
-            type: integer
-          required: true
-          description: ID of user to get.
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/RegisterPayload"
-      responses:
-        200:
-          description: Returns updated user info.
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/UserDataWrapper"
-    delete:
-      tags:
-        - Users
-      summary: Delete an user by ID.
-      description: For admin. Delete an user by ID
-      produces:
-        - application/json
-      parameters:
-        - in: path
-          name: id
-          schema:
-            type: integer
-          required: true
-          description: ID of user to get.
-      responses:
-        204:
-          description: Confirms the user whas deleted.
-  /users/setAsTattooist/{id}:
-    put:
-      tags:
-        - Users
-      summary: Set a registed user as tattooist.
-      description: For admin. In this API, a tattooist would have to register as a client first, an then the admin would set the user as a tattooist.
-      produces:
-        - application/json
-      parameters:
-        - in: path
-          name: id
-          schema:
-            type: integer
-          required: true
-          description: ID of user to get.
-      responses:
-        200:
-          description: Returns updated user info.
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/UserDataWrapper"
   /users/me:
     get:
       tags:
@@ -249,3 +103,377 @@ paths:
       responses:
         204:
           description: Confirms the user whas deleted.
+  /users/:
+    get:
+      tags:
+        - Users - Admin CRUD
+      summary: List all users.
+      description: For admin. Returns all users using pagination
+      produces:
+        - application/json
+      parameters:
+        - in: query
+          name: page
+          schema:
+            type: integer
+          required: false
+          description: Index of the page.
+        - in: query
+          name: pageSize
+          schema:
+            type: integer
+          required: false
+          description: Number of items to return each page
+      responses:
+        200:
+          description: Returns users.
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/Pagination"
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          items:
+                            type: array
+                            items:
+                              $ref: "#/components/schemas/User"
+    post:
+      tags:
+        - Users - Admin CRUD
+      summary: Create a new user
+      description: For admin. Creates a new user.
+      produces:
+        - application/json
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RegisterPayload"
+      responses:
+        201:
+          description: Retuns created user info.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserDataWrapper"
+  /users/{id}:
+    get:
+      tags:
+        - Users - Admin CRUD
+      summary: Retrieve a user by ID.
+      description: For admin. Retrieves an user by ID
+      produces:
+        - application/json
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+          description: ID of user to get.
+      responses:
+        200:
+          description: Returns user.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserDataWrapper"
+    put:
+      tags:
+        - Users - Admin CRUD
+      summary: Update a user by ID.
+      description: For admin. Update an user info by ID
+      produces:
+        - application/json
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+          description: ID of user to get.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RegisterPayload"
+      responses:
+        200:
+          description: Returns updated user info.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserDataWrapper"
+    delete:
+      tags:
+        - Users - Admin CRUD
+      summary: Delete an user by ID.
+      description: For admin. Delete an user by ID
+      produces:
+        - application/json
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+          description: ID of user to get.
+      responses:
+        204:
+          description: Confirms the user whas deleted.
+  /users/setAsTattooist/{id}:
+    put:
+      tags:
+        - Users - Admin CRUD
+      summary: Set a registed user as tattooist.
+      description: For admin. In this API, a tattooist would have to register as a client first, an then the admin would set the user as a tattooist.
+      produces:
+        - application/json
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+          description: ID of user to get.
+      responses:
+        200:
+          description: Returns updated user info.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserDataWrapper"
+  /appointments/my:
+    get:
+      tags:
+        - User Appointments
+      summary: Get all of the current user's appointments.
+      description: Retrieve a paginated list of appointments for the currently authenticated user.
+      produces:
+        - application/json
+      parameters:
+        - in: query
+          name: page
+          schema:
+            type: integer
+          required: false
+          description: Index of the page.
+        - in: query
+          name: pageSize
+          schema:
+            type: integer
+          required: false
+          description: Number of items to return each page.
+      responses:
+        200:
+          description: Returns paginated list of user appointments.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AppointmentPaginationResponse"
+    post:
+      tags:
+        - User Appointments
+      summary: Request a new appointment.
+      description: Clients can request a new appointment with this endpoint.
+      produces:
+        - application/json
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AppointmentPayload"
+      responses:
+        200:
+          description: Returns created appointment details.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AppointmentResponse"
+  /appointments/my/{id}:
+    get:
+      tags:
+        - User Appointments
+      summary: Get specific appointment details of the current user by ID.
+      description: Retrieve details of a specific appointment by ID for the currently authenticated user.
+      produces:
+        - application/json
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+          description: ID of appointment to retrieve.
+      responses:
+        200:
+          description: Returns appointment details.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AppointmentResponse"
+    put:
+      tags:
+        - User Appointments
+      summary: Update specific appointment details of the current user by ID.
+      description: Modify details of a specific appointment by ID for the currently authenticated user.
+      produces:
+        - application/json
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+          description: ID of appointment to modify.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AppointmentUpdatePayload"
+      responses:
+        200:
+          description: Returns updated appointment details.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AppointmentResponse"
+    delete:
+      tags:
+        - User Appointments
+      summary: Delete a specific appointment of the current user by ID.
+      description: Remove a specific appointment by ID for the currently authenticated user.
+      produces:
+        - application/json
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+          description: ID of appointment to delete.
+      responses:
+        204:
+          description: Appointment was deleted successfully.
+  /appointments/:
+    get:
+      tags:
+        - Appointments - Admin CRUD
+      summary: List all appointments.
+      description: For admins. Returns a paginated list of all appointments.
+      produces:
+        - application/json
+      parameters:
+        - in: query
+          name: page
+          schema:
+            type: integer
+          required: false
+          description: Index of the page.
+        - in: query
+          name: pageSize
+          schema:
+            type: integer
+          required: false
+          description: Number of items to return each page.
+      responses:
+        200:
+          description: Returns paginated list of all appointments.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AppointmentPaginationResponse"
+    post:
+      tags:
+        - Appointments - Admin CRUD
+      summary: Create a new appointment.
+      description: For admins. Creates a new appointment.
+      produces:
+        - application/json
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AppointmentPayload"
+      responses:
+        201:
+          description: Returns created appointment details.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AppointmentResponse"
+  /appointments/{id}:
+    get:
+      tags:
+        - Appointments - Admin CRUD
+      summary: Retrieve a specific appointment by ID.
+      description: For admins. Retrieve details of a specific appointment by ID.
+      produces:
+        - application/json
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+          description: ID of appointment to retrieve.
+      responses:
+        200:
+          description: Returns appointment details.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AppointmentResponse"
+    put:
+      tags:
+        - Appointments - Admin CRUD
+      summary: Update a specific appointment by ID.
+      description: For admins. Modify details of a specific appointment by ID.
+      produces:
+        - application/json
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+          description: ID of appointment to modify.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AppointmentUpdatePayload"
+      responses:
+        200:
+          description: Returns updated appointment details.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AppointmentResponse"
+    delete:
+      tags:
+        - Appointments - Admin CRUD
+      summary: Delete a specific appointment by ID.
+      description: For admins. Remove a specific appointment by ID.
+      produces:
+        - application/json
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+          description: ID of appointment to delete.
+      responses:
+        204:
+          description: Appointment was deleted successfully.
