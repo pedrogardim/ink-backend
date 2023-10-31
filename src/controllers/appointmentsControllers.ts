@@ -40,9 +40,7 @@ export const getAppointments: Handler = async (req, res) => {
       page,
       pageSize,
       totalItems,
-      items: appointments.map((appointment) =>
-        formatAppointment(appointment, req)
-      ),
+      items: appointments.map((a) => formatAppointment(a, req)),
     })
   );
 };
@@ -82,6 +80,39 @@ export const deleteAppointment: Handler = async (req, res) => {
 
   if (!appointmentDeleted.affected)
     throw { code: 404, message: "Appointment not found" };
-  
+
   res.status(204).json(appointmentDeleted);
 };
+
+export const getMyAppointments: Handler = async (req, res) => {
+  const { userId, role } = req.currentUser;
+  let { pageSize = 10, page = 1 } = req.query;
+  pageSize = parseInt(pageSize as string);
+  page = parseInt(page as string);
+
+  const idToQuery = role === "tattooist" ? "tattooistId" : "clientId";
+
+  console.log({ [idToQuery]: userId });
+
+  const [appointments, totalItems] = await Appointment.findAndCount({
+    where: { [idToQuery]: userId },
+    take: pageSize,
+    relations: {
+      client: role === "tattooist",
+      tattooist: role !== "tattooist",
+    },
+    skip: (page - 1) * pageSize,
+  });
+
+  res.status(200).json(
+    formatPaginationResponse({
+      req,
+      page,
+      pageSize,
+      totalItems,
+      items: appointments.map((a) => formatAppointment(a, req)),
+    })
+  );
+};
+
+export const requestAppointment: Handler = async (req, res) => {};

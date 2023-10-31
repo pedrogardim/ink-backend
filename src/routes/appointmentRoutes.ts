@@ -8,9 +8,15 @@ import {
   getAppointmentById,
   getAppointments,
   updateAppointment,
+  getMyAppointments,
+  requestAppointment,
 } from "../controllers/appointmentsControllers";
 
 const router = express.Router();
+
+// User operations
+router.get("/my", asyncWrapper(getMyAppointments));
+router.post("/my", asyncWrapper(requestAppointment));
 
 //Admin CRUD
 const adminRouter = express.Router();
