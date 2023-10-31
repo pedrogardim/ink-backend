@@ -1,0 +1,39 @@
+import express from "express";
+
+import { asyncWrapper } from "../utils/wrappers";
+import { roleCheck } from "../middleware/roleCheck";
+import {
+  createAppointment,
+  deleteAppointment,
+  getAppointmentById,
+  getAppointments,
+  updateAppointment,
+  getMyAppointments,
+  getMyAppointmentById,
+  requestAppointment,
+  updateMyAppointment,
+  deleteMyAppointment,
+} from "../controllers/appointmentsControllers";
+
+const router = express.Router();
+
+// User operations
+router.get("/my", asyncWrapper(getMyAppointments));
+router.get("/my/:id", asyncWrapper(getMyAppointmentById));
+router.post("/my", asyncWrapper(requestAppointment));
+router.put("/my/:id", asyncWrapper(updateMyAppointment));
+router.delete("/my/:id", asyncWrapper(deleteMyAppointment));
+
+//Admin CRUD
+const adminRouter = express.Router();
+adminRouter.use(roleCheck("super_admin"));
+
+adminRouter.get("/", asyncWrapper(getAppointments));
+adminRouter.get("/:id", asyncWrapper(getAppointmentById));
+adminRouter.post("/", asyncWrapper(createAppointment));
+adminRouter.put("/:id", asyncWrapper(updateAppointment));
+adminRouter.delete("/:id", asyncWrapper(deleteAppointment));
+
+router.use("/", adminRouter);
+
+export default router;

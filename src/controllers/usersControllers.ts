@@ -2,10 +2,7 @@ import { Handler } from "express";
 import bcrypt from "bcrypt";
 import { User } from "../models/User";
 import { formatPaginationResponse, formatUser } from "../utils/format";
-import {
-  validateRegistrationData,
-  validateUserUpdateData,
-} from "../utils/validation";
+import { validateUserData } from "../utils/userValidation";
 import { AppDataSource } from "../db";
 
 //Admin CRUD
@@ -38,7 +35,7 @@ export const getUsers: Handler = async (req, res) => {
 };
 
 export const createUser: Handler = async (req, res) => {
-  validateRegistrationData(req.body);
+  validateUserData(req.body);
   const encryptedPassword = await bcrypt.hash(req.body.password, 10);
   const createdUser = await User.create({
     ...req.body,
@@ -48,7 +45,7 @@ export const createUser: Handler = async (req, res) => {
 };
 
 export const updateUser: Handler = async (req, res) => {
-  validateUserUpdateData(req.body);
+  validateUserData(req.body, true);
   const userRepository = AppDataSource.getRepository(User);
   let user = await userRepository.findOneBy({ id: parseInt(req.params.id) });
   if (!user) throw { code: 404, message: "User not found" };
@@ -73,13 +70,27 @@ export const setAsTattoist: Handler = async (req, res) => {
 //User
 
 export const getMyProfile: Handler = async (req, res) => {
-  res.status(200).json("ok");
+  const user = await User.findOneBy({ id: parseInt(req.currentUser.userId) });
+  console.log(req.currentUser);
+  if (!user) throw { code: 404, message: "User not found" };
+  res.status(200).json({ data: formatUser(user, req) });
 };
 
 export const updateMyProfile: Handler = async (req, res) => {
-  res.status(200).json("ok");
+  validateUserData(req.body, true);
+  const userRepository = AppDataSource.getRepository(User);
+  let user = await userRepository.findOneBy({
+    id: parseInt(req.currentUser.userId),
+  });
+  if (!user) throw { code: 404, message: "User not found" };
+  user = { ...user, ...req.body };
+  res.status(200).json({ data: formatUser(user as User, req) });
 };
 
 export const deleteMyProfile: Handler = async (req, res) => {
-  res.status(200).json("ok");
+  const userDeleted = await User.delete({
+    id: parseInt(req.currentUser.userId),
+  });
+  if (!userDeleted.affected) throw { code: 404, message: "User not found" };
+  res.status(204).json(userDeleted);
 };

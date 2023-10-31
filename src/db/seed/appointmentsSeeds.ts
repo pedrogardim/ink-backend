@@ -22,8 +22,8 @@ export const seedAppointments = async (users: User[]) => {
 
       return Appointment.create({
         description: faker.lorem.text().slice(0, 256),
-        start_time: startTime,
-        end_time: endTime,
+        startTime: startTime,
+        endTime: endTime,
         type: faker.helpers.arrayElement(randomTypes),
         client: faker.helpers.arrayElement(clients),
         tattooist: faker.helpers.arrayElement(tattooists),
