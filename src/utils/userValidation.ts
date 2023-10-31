@@ -4,39 +4,48 @@ const NAME_REGEX = /^[a-zA-Z\u00C0-\u017F ]+$/;
 const EMAIL_REGEX = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
 const PASSWORD_REGEX = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,20}$/;
 const PHONE_NUMBER_REGEX = /^[0-9]{9}$/;
+const URL_REGEX =
+  /^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/;
 
 type ValidationRules = {
   [key: string]: {
-    formated: string;
     validation: (data: any) => boolean;
+    required?: boolean;
   };
 };
 
 const validationRules: ValidationRules = {
   firstName: {
-    formated: "First name",
     validation: (id) => NAME_REGEX.test(id),
+    required: true,
   },
   lastName: {
-    formated: "Last name",
     validation: (id) => NAME_REGEX.test(id),
+    required: true,
   },
   email: {
-    formated: "Email",
     validation: (id) => EMAIL_REGEX.test(id),
+    required: true,
   },
   password: {
-    formated: "Password",
     validation: (id) => PASSWORD_REGEX.test(id),
+    required: true,
   },
   phoneNumber: {
-    formated: "Phone number",
     validation: (id) => PHONE_NUMBER_REGEX.test(id),
+    required: true,
+  },
+  profilePicUrl: {
+    validation: (id) => URL_REGEX.test(id),
+  },
+  role: {
+    validation: (type) =>
+      ["client", "tattooist", "admin", "super_admin"].includes(type),
   },
 };
 
 type RegisterPayload = {
-  [key: keyof typeof validationRules]: string;
+  [key: keyof typeof validationRules]: string | number;
 };
 
 export const validateUserData = (
@@ -51,15 +60,15 @@ export const validateUserData = (
         message: `Field '${key}' can't be inserted into user`,
         code: 400,
       };
-    if (!data[key])
+    if (rule.required && !data[key] && data[key] !== 0)
       throw {
-        message: `${rule.formated} can't be empty`,
+        message: `Field '${key}' can't be empty`,
         code: 400,
       };
 
-    if (!rule.validation(data[key]))
+    if ((data[key] || data[key] === 0) && !rule.validation(data[key]))
       throw {
-        message: `${rule.formated} is not valid`,
+        message: `Field '${key}' is not valid`,
         code: 400,
       };
   }
@@ -72,7 +81,7 @@ export const validateLogin = (data: LoginPayload) => {
     const key = field as keyof LoginPayload;
     if (!data[key])
       throw {
-        message: `${validationRules[key].formated} can't be empty`,
+        message: `Field '${field}' can't be empty`,
         code: 400,
       };
   }
