@@ -12,7 +12,7 @@ import {
 } from "typeorm";
 
 import { Appointment } from "./Appointment";
-import { TattooWork } from "./TattoWork";
+import { TattooWork } from "./TattooWork";
 
 @Entity("users")
 export class User extends BaseEntity {
