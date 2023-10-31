@@ -1,10 +1,7 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { Handler } from "express";
-import {
-  validateLogin,
-  validateRegistrationData,
-} from "../utils/userValidation";
+import { validateLogin, validateUserData } from "../utils/userValidation";
 import { LoginPayload } from "../types/auth";
 import { User } from "../models/User";
 import { formatUser } from "../utils/format";
@@ -14,7 +11,7 @@ import { formatUser } from "../utils/format";
 const { JWT_SECRET = "" } = process.env;
 
 export const register: Handler = async (req, res) => {
-  validateRegistrationData(req.body);
+  validateUserData(req.body);
 
   const encryptedPassword = await bcrypt.hash(req.body.password, 10);
 

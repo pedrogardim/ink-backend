@@ -39,10 +39,18 @@ type RegisterPayload = {
   [key: keyof typeof validationRules]: string;
 };
 
-export const validateRegistrationData = (data: RegisterPayload) => {
-  for (const fields of Object.keys(validationRules)) {
+export const validateUserData = (
+  data: RegisterPayload,
+  isUpdating?: boolean
+) => {
+  for (const fields of Object.keys(isUpdating ? data : validationRules)) {
     const key = fields as keyof RegisterPayload;
     const rule = validationRules[key];
+    if (!rule)
+      throw {
+        message: `Field '${key}' can't be inserted into user`,
+        code: 400,
+      };
     if (!data[key])
       throw {
         message: `${rule.formated} can't be empty`,
@@ -68,29 +76,5 @@ export const validateLogin = (data: LoginPayload) => {
         code: 400,
       };
   }
-  return true;
-};
-
-export const validateUserUpdateData = (data: RegisterPayload) => {
-  for (const fields of Object.keys(data)) {
-    const key = fields as keyof RegisterPayload;
-    const rule = validationRules[key];
-    if (!rule)
-      throw {
-        message: `Field '${key}' can't be inserted into user`,
-        code: 400,
-      };
-    if (!data[key])
-      throw {
-        message: `${rule.formated} can't be empty`,
-        code: 400,
-      };
-    if (!rule.validation(data[key]))
-      throw {
-        message: `${rule.formated} is not valid`,
-        code: 400,
-      };
-  }
-
   return true;
 };

@@ -50,13 +50,11 @@ export const getAppointments: Handler = async (req, res) => {
 export const createAppointment: Handler = async (req, res) => {
   await validateAppointment(req.body);
   const createdAppointment = await Appointment.create(req.body).save();
-
-  // res.status(201).json({ data: createdAppointment });
   res.status(201).json({ data: formatAppointment(createdAppointment, req) });
 };
 
 export const updateAppointment: Handler = async (req, res) => {
-  await validateAppointment(req.body);
+  await validateAppointment(req.body, true);
   const appointmentRepository = AppDataSource.getRepository(Appointment);
   let appointment = await appointmentRepository.findOneBy({
     id: parseInt(req.params.id),

@@ -33,10 +33,20 @@ type AppointmentData = {
   [key: keyof typeof validationRules]: string;
 };
 
-export const validateAppointment = async (appointmentData: AppointmentData) => {
-  for (const field of Object.keys(validationRules)) {
+export const validateAppointment = async (
+  appointmentData: AppointmentData,
+  isUpdating?: boolean
+) => {
+  for (const field of Object.keys(
+    isUpdating ? appointmentData : validationRules
+  )) {
     const key = field as keyof AppointmentData;
     const rule = validationRules[key];
+    if (!rule)
+      throw {
+        message: `Field '${key}' can't be inserted into an appointment`,
+        code: 400,
+      };
     if (!appointmentData[key])
       throw {
         message: `${rule.formated} can't be empty`,
@@ -49,7 +59,6 @@ export const validateAppointment = async (appointmentData: AppointmentData) => {
         code: 400,
       };
   }
-
   const overlapingAppointments = await Appointment.count({
     relations: ["tattooist", "client"],
     where: {
