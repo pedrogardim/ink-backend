@@ -1,5 +1,6 @@
 import { Request } from "express";
 import { User } from "../models/User";
+import { Appointment } from "../models/Appointment";
 
 export const getBaseUrl = (req: Request) =>
   req.protocol + "://" + req.get("host") + "/api";
@@ -12,6 +13,16 @@ export const formatUser = (user: User, req: Request) => ({
   self: `${getBaseUrl(req)}/users/${user.id}`,
   ...user,
   password: undefined,
+});
+
+export const formatAppointment = (appointment: Appointment, req: Request) => ({
+  kind: "appointment",
+  self: `${getBaseUrl(req)}/appointments/${appointment.id}`,
+  ...appointment,
+  client: appointment.client ? formatUser(appointment.client, req) : undefined,
+  tattooist: appointment.tattooist
+    ? formatUser(appointment.tattooist, req)
+    : undefined,
 });
 
 type FormatPaginationArguments = {

@@ -2,10 +2,7 @@ import { Handler } from "express";
 import bcrypt from "bcrypt";
 import { User } from "../models/User";
 import { formatPaginationResponse, formatUser } from "../utils/format";
-import {
-  validateRegistrationData,
-  validateUserUpdateData,
-} from "../utils/validation";
+import { validateUserData } from "../utils/userValidation";
 import { AppDataSource } from "../db";
 
 //Admin CRUD
@@ -38,7 +35,7 @@ export const getUsers: Handler = async (req, res) => {
 };
 
 export const createUser: Handler = async (req, res) => {
-  validateRegistrationData(req.body);
+  validateUserData(req.body);
   const encryptedPassword = await bcrypt.hash(req.body.password, 10);
   const createdUser = await User.create({
     ...req.body,
@@ -48,7 +45,7 @@ export const createUser: Handler = async (req, res) => {
 };
 
 export const updateUser: Handler = async (req, res) => {
-  validateUserUpdateData(req.body);
+  validateUserData(req.body, true);
   const userRepository = AppDataSource.getRepository(User);
   let user = await userRepository.findOneBy({ id: parseInt(req.params.id) });
   if (!user) throw { code: 404, message: "User not found" };
@@ -80,7 +77,7 @@ export const getMyProfile: Handler = async (req, res) => {
 };
 
 export const updateMyProfile: Handler = async (req, res) => {
-  validateUserUpdateData(req.body);
+  validateUserData(req.body, true);
   const userRepository = AppDataSource.getRepository(User);
   let user = await userRepository.findOneBy({
     id: parseInt(req.currentUser.userId),
