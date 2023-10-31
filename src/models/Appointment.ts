@@ -30,6 +30,12 @@ export class Appointment extends BaseEntity {
   @Column({ name: "end_time" })
   endTime: Date;
 
+  @Column({ name: "client_id" })
+  clientId: number;
+
+  @Column({ name: "tattooist_id" })
+  tattooistId: number;
+
   @Column({
     type: "enum",
     enum: ["tattoo", "piercing"],
