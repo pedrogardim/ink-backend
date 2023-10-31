@@ -92,8 +92,6 @@ export const getMyAppointments: Handler = async (req, res) => {
 
   const idToQuery = role === "tattooist" ? "tattooistId" : "clientId";
 
-  console.log({ [idToQuery]: userId });
-
   const [appointments, totalItems] = await Appointment.findAndCount({
     where: { [idToQuery]: userId },
     take: pageSize,
@@ -115,4 +113,28 @@ export const getMyAppointments: Handler = async (req, res) => {
   );
 };
 
-export const requestAppointment: Handler = async (req, res) => {};
+export const requestAppointment: Handler = async (req, res) => {
+  const { userId, role } = req.currentUser;
+  const { startTime, endTime, tattooistId } = req.body;
+
+  if (role === "tattooist")
+    throw { code: 501, message: "Tattooist can't create appointments yet" };
+
+  await validateAppointment({
+    startTime,
+    endTime,
+    tattooistId,
+    clientId: userId,
+  });
+
+  const createdAppointment = await Appointment.create({
+    startTime,
+    endTime,
+    tattooistId,
+    clientId: userId,
+  }).save();
+
+  res
+    .status(200)
+    .json({ data: formatAppointment(createdAppointment as Appointment, req) });
+};
