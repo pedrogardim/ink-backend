@@ -14,5 +14,6 @@ export const errorHandler: ErrorRequestHandler = (err, req, res, next) => {
   if (Object.keys(typeOrmErrorsMap).includes(err.code)) {
     error = typeOrmErrorsMap[err.code as keyof typeof typeOrmErrorsMap];
   }
-  res.status(error.code).json({ error });
+  const { message, code } = error;
+  res.status(code || 500).json({ error: { message, code } });
 };
