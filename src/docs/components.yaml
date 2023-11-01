@@ -234,6 +234,30 @@ components:
       properties:
         description:
           type: string
+    TattooWork:
+      type: object
+      properties:
+        id:
+          type: integer
+        description:
+          type: string
+        startTime:
+          type: string
+          format: date-time
+        endTime:
+          type: string
+          format: date-time
+        clientId:
+          type: integer
+        tattooistId:
+          type: integer
+    Error:
+      type: object
+      properties:
+        code:
+          type: integer
+        message:
+          type: string
   securitySchemes:
     bearerAuth:
       type: http
