@@ -28,7 +28,7 @@ export const formatAppointment = (appointment: Appointment, req: Request) => ({
 
 export const formatTattooWork = (tattooWork: TattooWork, req: Request) => ({
   kind: "tattooWork",
-  self: `${getBaseUrl(req)}/appointments/${tattooWork.id}`,
+  self: `${getBaseUrl(req)}/tattooWorks/${tattooWork.id}`,
   ...tattooWork,
   tattooist: tattooWork.tattooist
     ? formatUser(tattooWork.tattooist, req)
@@ -62,7 +62,7 @@ export const formatPaginationResponse = ({
         ? undefined
         : getReqUrl(req).includes("page=")
         ? getReqUrl(req).replace(`page=${page}`, `page=${page + 1}`)
-        : getReqUrl(req) + "/?page=2",
+        : getReqUrl(req) + "?page=2",
     previous:
       page === 1
         ? undefined
