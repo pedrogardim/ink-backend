@@ -254,6 +254,7 @@ components:
           type: integer
           format: int32
           description: ID for the tattooist.
+          default: 200
         type:
           type: string
           enum:
@@ -268,6 +269,29 @@ components:
           type: string
           format: date-time
           description: Date and time when the tattoo work was last updated.
+    TattooWorkPayload:
+      type: object
+      properties:
+        description:
+          type: string
+          maxLength: 256
+          description: Description of the tattoo work.
+        image_url:
+          type: string
+          maxLength: 2000
+          description: URL where the tattoo photo can be found.
+          nullable: true
+        tattooistId:
+          type: integer
+          format: int32
+          description: ID for the tattooist.
+          default: 200
+        type:
+          type: string
+          enum:
+            - tattoo
+            - piercing
+          description: Type of work, either "tattoo" or "piercing".
     Error:
       type: object
       properties:

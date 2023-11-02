@@ -1,6 +1,7 @@
 import { MoreThanOrEqual, LessThanOrEqual, Not } from "typeorm";
 import { Appointment } from "../models/Appointment";
 import { User } from "../models/User";
+import { AppointmentData } from "../types/appointments";
 
 const INT_REGEX = /^-?\d+$/;
 const URL_REGEX =
@@ -42,10 +43,6 @@ const validationRules: ValidationRules = {
   },
 };
 
-type AppointmentData = {
-  [key: keyof typeof validationRules]: string | number;
-};
-
 export const validateAppointment = async (
   appointmentData: AppointmentData,
   isUpdating?: boolean,
@@ -77,6 +74,20 @@ export const validateAppointment = async (
       };
   }
 
+  const { startTime, endTime } = appointmentData as { [key: string]: string };
+
+  if (+new Date(startTime) > +new Date(endTime))
+    throw {
+      message: "End time must be after start time",
+      code: 400,
+    };
+
+  if (new Date(startTime).getHours() < 9 || new Date(endTime).getHours() > 21)
+    throw {
+      message: "Appoint must be within 9am and 9pm",
+      code: 400,
+    };
+
   const tattooist = await User.findOne({
     where: { id: appointmentData.tattooistId as number },
     select: {
@@ -95,8 +106,8 @@ export const validateAppointment = async (
     where: {
       ...(isUpdating && { id: Not(id as number) }),
       tattooistId: appointmentData.tattooistId as number,
-      startTime: LessThanOrEqual(new Date(appointmentData.endTime)),
-      endTime: MoreThanOrEqual(new Date(appointmentData.startTime)),
+      startTime: LessThanOrEqual(new Date(endTime)),
+      endTime: MoreThanOrEqual(new Date(startTime)),
     },
   });
   if (overlapingAppointments > 0)

@@ -562,7 +562,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/TattooWork"
+              $ref: "#/components/schemas/TattooWorkPayload"
       responses:
         201:
           description: Successfully created TattooWork
@@ -624,7 +624,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/TattooWork"
+              $ref: "#/components/schemas/TattooWorkPayload"
       responses:
         200:
           description: Successfully updated TattooWork
@@ -708,7 +708,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/TattooWork"
+              $ref: "#/components/schemas/TattooWorkPayload"
       responses:
         201:
           description: Successfully created TattooWork
@@ -770,7 +770,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/TattooWork"
+              $ref: "#/components/schemas/TattooWorkPayload"
       responses:
         200:
           description: Successfully updated TattooWork
