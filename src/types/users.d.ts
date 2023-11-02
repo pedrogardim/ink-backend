@@ -1,7 +1,7 @@
 import { User, UserRoleType } from "../models/User";
 import { PaginationQuery } from "./controllers";
 
-export interface UserQuery extends PaginationQuery {
+export interface UserData {
   email?: string;
   id?: number;
   firstName?: string;
@@ -11,3 +11,5 @@ export interface UserQuery extends PaginationQuery {
   createdAt?: Date;
   updatedAt?: Date;
 }
+
+export interface UserQuery extends PaginationQuery, UserData {}
