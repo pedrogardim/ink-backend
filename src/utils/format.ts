@@ -1,6 +1,7 @@
 import { Request } from "express";
 import { User } from "../models/User";
 import { Appointment } from "../models/Appointment";
+import { TattooWork } from "../models/TattooWork";
 
 export const getBaseUrl = (req: Request) =>
   req.protocol + "://" + req.get("host") + "/api";
@@ -22,6 +23,15 @@ export const formatAppointment = (appointment: Appointment, req: Request) => ({
   client: appointment.client ? formatUser(appointment.client, req) : undefined,
   tattooist: appointment.tattooist
     ? formatUser(appointment.tattooist, req)
+    : undefined,
+});
+
+export const formatTattooWork = (tattooWork: TattooWork, req: Request) => ({
+  kind: "tattooWork",
+  self: `${getBaseUrl(req)}/tattooWorks/${tattooWork.id}`,
+  ...tattooWork,
+  tattooist: tattooWork.tattooist
+    ? formatUser(tattooWork.tattooist, req)
     : undefined,
 });
 
@@ -50,7 +60,9 @@ export const formatPaginationResponse = ({
     next:
       page === Math.ceil(totalItems / pageSize)
         ? undefined
-        : getReqUrl(req).replace(`page=${page}`, `page=${page + 1}`),
+        : getReqUrl(req).includes("page=")
+        ? getReqUrl(req).replace(`page=${page}`, `page=${page + 1}`)
+        : getReqUrl(req) + "?page=2",
     previous:
       page === 1
         ? undefined
