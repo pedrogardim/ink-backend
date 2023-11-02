@@ -29,7 +29,7 @@ export const formatAppointment = (appointment: Appointment) => ({
     : undefined,
 });
 
-export const formatTattooWork = (tattooWork: TattooWork, req: any) => ({
+export const formatTattooWork = (tattooWork: TattooWork) => ({
   kind: "tattooWork",
   self: `${BASE_URL}/tattooWorks/${tattooWork.id}`,
   ...tattooWork,
