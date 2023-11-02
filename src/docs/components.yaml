@@ -239,18 +239,35 @@ components:
       properties:
         id:
           type: integer
+          format: int32
+          description: ID of the Tattoo Work.
         description:
           type: string
-        startTime:
+          maxLength: 256
+          description: Description of the tattoo work.
+        image_url:
           type: string
-          format: date-time
-        endTime:
-          type: string
-          format: date-time
-        clientId:
-          type: integer
+          maxLength: 2000
+          description: URL where the tattoo photo can be found.
+          nullable: true
         tattooistId:
           type: integer
+          format: int32
+          description: ID for the tattooist.
+        type:
+          type: string
+          enum:
+            - tattoo
+            - piercing
+          description: Type of work, either "tattoo" or "piercing".
+        created_at:
+          type: string
+          format: date-time
+          description: Date and time when the tattoo work was created.
+        updated_at:
+          type: string
+          format: date-time
+          description: Date and time when the tattoo work was last updated.
     Error:
       type: object
       properties:
