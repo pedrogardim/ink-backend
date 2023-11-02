@@ -77,6 +77,20 @@ export const validateAppointment = async (
       };
   }
 
+  const { startTime, endTime } = appointmentData;
+
+  if (+new Date(startTime) > +new Date(endTime))
+    throw {
+      message: "End time must be after start time",
+      code: 400,
+    };
+
+  if (new Date(startTime).getHours() < 9 || new Date(endTime).getHours() > 21)
+    throw {
+      message: "Appoint must be within 9am and 9pm",
+      code: 400,
+    };
+
   const tattooist = await User.findOne({
     where: { id: appointmentData.tattooistId as number },
     select: {
