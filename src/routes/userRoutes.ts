@@ -1,4 +1,4 @@
-import express from "express";
+import express, { Request } from "express";
 import {
   getUserById,
   getUsers,
@@ -20,8 +20,24 @@ const router = express.Router();
 const adminRouter = express.Router();
 adminRouter.use(roleCheck("super_admin"));
 
-adminRouter.get("/", asyncWrapper(getUsers));
-adminRouter.get("/:id", asyncWrapper(getUserById));
+adminRouter.get("/", async (req, res, next) => {
+  try {
+    const users = await getUsers(req.query);
+    res.status(200).json(users);
+  } catch (err) {
+    next(err);
+  }
+});
+
+adminRouter.get("/:id", async (req, res, next) => {
+  try {
+    const user = await getUserById(parseInt(req.params.id));
+    res.status(200).json(user);
+  } catch (err) {
+    next(err);
+  }
+});
+
 adminRouter.post("/", asyncWrapper(createUser));
 adminRouter.put("/:id", asyncWrapper(updateUser));
 adminRouter.delete("/:id", asyncWrapper(deleteUser));
