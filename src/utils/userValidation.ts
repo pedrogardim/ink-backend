@@ -1,5 +1,4 @@
-import { LoginPayload } from "../types/auth";
-import { UserData } from "../types/users";
+import { UserData, LoginPayload } from "../types/users";
 
 const NAME_REGEX = /^[a-zA-Z\u00C0-\u017F ]+$/;
 const EMAIL_REGEX = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
