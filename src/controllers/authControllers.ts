@@ -31,7 +31,7 @@ export const register: Handler = async (req, res) => {
       token,
       tokenIat: new Date(),
       tokenExp: new Date(Date.now() + 1000 * 60 * 60),
-      user: formatUser(user, req),
+      user: formatUser(user),
     },
   });
 };
@@ -61,7 +61,7 @@ export const login: Handler = async (req, res) => {
       token,
       tokenIat: new Date(),
       tokenExp: new Date(Date.now() + 1000 * 60 * 60),
-      user: formatUser(user, req),
+      user: formatUser(user),
     },
   });
 };

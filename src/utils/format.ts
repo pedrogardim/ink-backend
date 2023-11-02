@@ -1,54 +1,50 @@
-import { Request } from "express";
 import { User } from "../models/User";
 import { Appointment } from "../models/Appointment";
 import { TattooWork } from "../models/TattooWork";
 
-export const getBaseUrl = (req: Request) =>
-  req.protocol + "://" + req.get("host") + "/api";
+export const BASE_URL = process.env.BASE_URL as string;
 
-export const getReqUrl = (req: Request) =>
-  req.protocol + "://" + req.get("host") + req.originalUrl;
-
-export const formatUser = (user: User, req: Request) => ({
+export const formatUser = (user: User) => ({
   kind: "user",
-  self: `${getBaseUrl(req)}/users/${user.id}`,
+  self: `${BASE_URL}/users/${user.id}`,
   ...user,
   password: undefined,
 });
 
-export const formatAppointment = (appointment: Appointment, req: Request) => ({
+export const formatAppointment = (appointment: Appointment, req: any) => ({
   kind: "appointment",
-  self: `${getBaseUrl(req)}/appointments/${appointment.id}`,
+  self: `${BASE_URL}/appointments/${appointment.id}`,
   ...appointment,
-  client: appointment.client ? formatUser(appointment.client, req) : undefined,
+  client: appointment.client ? formatUser(appointment.client) : undefined,
   tattooist: appointment.tattooist
-    ? formatUser(appointment.tattooist, req)
+    ? formatUser(appointment.tattooist)
     : undefined,
 });
 
-export const formatTattooWork = (tattooWork: TattooWork, req: Request) => ({
+export const formatTattooWork = (tattooWork: TattooWork, req: any) => ({
   kind: "tattooWork",
-  self: `${getBaseUrl(req)}/tattooWorks/${tattooWork.id}`,
+  self: `${BASE_URL}/tattooWorks/${tattooWork.id}`,
   ...tattooWork,
   tattooist: tattooWork.tattooist
-    ? formatUser(tattooWork.tattooist, req)
+    ? formatUser(tattooWork.tattooist)
     : undefined,
 });
 
 type FormatPaginationArguments = {
-  req: Request;
+  req?: any;
   page: number;
   pageSize: number;
   totalItems: number;
   items: any[];
+  routePrefix?: string;
 };
 
 export const formatPaginationResponse = ({
-  req,
   page,
   pageSize,
   totalItems,
   items,
+  routePrefix,
 }: FormatPaginationArguments) => ({
   data: {
     kind: (items[0] || {}).kind,
@@ -56,17 +52,13 @@ export const formatPaginationResponse = ({
     itemsPerPage: pageSize,
     startIndex: (page - 1) * pageSize + 1,
     totalItems,
-    self: getReqUrl(req),
+    self: BASE_URL + routePrefix + "?page=" + page,
     next:
       page === Math.ceil(totalItems / pageSize)
         ? undefined
-        : getReqUrl(req).includes("page=")
-        ? getReqUrl(req).replace(`page=${page}`, `page=${page + 1}`)
-        : getReqUrl(req) + "?page=2",
+        : BASE_URL + routePrefix + "?page=" + (page + 1),
     previous:
-      page === 1
-        ? undefined
-        : getReqUrl(req).replace(`page=${page}`, `page=${page - 1}`),
+      page === 1 ? undefined : BASE_URL + routePrefix + "?page=" + (page - 1),
     pageIndex: page,
     totalPages: Math.ceil(totalItems / pageSize),
     items: items.map((u) => ({ ...u, kind: undefined })),
