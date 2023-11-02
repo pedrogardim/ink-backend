@@ -1,22 +1,21 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import { Handler } from "express";
 import { validateLogin, validateUserData } from "../utils/userValidation";
-import { LoginPayload } from "../types/auth";
 import { User } from "../models/User";
-import { formatUser } from "../utils/format";
+import { formatAuthentication } from "../utils/format";
+import { UserData, LoginPayload } from "../types/users";
 
 //errors are handled by async wrapper and error middleware!
 
 const { JWT_SECRET = "" } = process.env;
 
-export const register: Handler = async (req, res) => {
-  validateUserData(req.body);
+export const registerUser = async (userData: UserData) => {
+  validateUserData(userData);
 
-  const encryptedPassword = await bcrypt.hash(req.body.password, 10);
+  const encryptedPassword = await bcrypt.hash(userData.password as string, 10);
 
   const user = await User.create({
-    ...req.body,
+    ...userData,
     role: "client",
     password: encryptedPassword,
   }).save();
@@ -25,20 +24,11 @@ export const register: Handler = async (req, res) => {
     expiresIn: "1h",
   });
 
-  res.status(201).json({
-    data: {
-      kind: "authentication",
-      token,
-      tokenIat: new Date(),
-      tokenExp: new Date(Date.now() + 1000 * 60 * 60),
-      user: formatUser(user, req),
-    },
-  });
+  return { data: formatAuthentication(token, user) };
 };
 
-export const login: Handler = async (req, res) => {
-  const { email, password } = req.body as LoginPayload;
-
+export const loginUser = async (userData: LoginPayload) => {
+  const { email, password } = userData;
   validateLogin({ email, password });
 
   const user = await User.findOneBy({ email });
@@ -47,21 +37,12 @@ export const login: Handler = async (req, res) => {
 
   const isPasswordCorrect = await bcrypt.compare(password, user.password);
 
-  if (!isPasswordCorrect) {
+  if (!isPasswordCorrect)
     throw { code: 401, message: "Invalid login credentials" };
-  }
 
   const token = jwt.sign({ userId: user.id, role: user.role }, JWT_SECRET, {
     expiresIn: "1h",
   });
 
-  res.status(200).json({
-    data: {
-      kind: "authentication",
-      token,
-      tokenIat: new Date(),
-      tokenExp: new Date(Date.now() + 1000 * 60 * 60),
-      user: formatUser(user, req),
-    },
-  });
+  return { data: formatAuthentication(token, user) };
 };

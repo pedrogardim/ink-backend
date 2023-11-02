@@ -5,11 +5,6 @@ import {
   createTattooWork,
   updateTattooWork,
   deleteTattooWork,
-  getMyTattooWorks,
-  getMyTattooWorkById,
-  createMyTattooWork,
-  updateMyTattooWork,
-  deleteMyTattooWork,
 } from "../controllers/tattooWorksControllers";
 import { asyncWrapper } from "../utils/wrappers";
 import { roleCheck } from "../middleware/roleCheck";
@@ -18,29 +13,61 @@ import { auth } from "../middleware/auth";
 const router = express.Router();
 
 //Public
-router.get("/", asyncWrapper(getTattooWorks));
-router.get("/", asyncWrapper(getMyTattooWorks));
+
+router.get("/", async (req, res) => {
+  const tattooWorks = await getTattooWorks(req.query);
+  res.status(200).json(tattooWorks);
+});
+
+router.get("/:id", async (req, res) => {
+  const tattooWork = await getTattooWorkById(parseInt(req.params.id));
+  res.status(200).json(tattooWork);
+});
 
 //User - Tattooist CRUD
 const tattooistRouter = express.Router();
 tattooistRouter.use(roleCheck("tattooist"));
 
-tattooistRouter.get("/:id", asyncWrapper(getMyTattooWorkById));
-tattooistRouter.post("/", asyncWrapper(createMyTattooWork));
-tattooistRouter.put("/:id", asyncWrapper(updateMyTattooWork));
-tattooistRouter.delete("/:id", asyncWrapper(deleteMyTattooWork));
+tattooistRouter.post("/", async (req, res) => {
+  const createdTattooWork = createTattooWork(req.body, req.currentUser);
+  res.status(201).json(createdTattooWork);
+});
+tattooistRouter.put("/:id", async (req, res) => {
+  const modifiedTattoWork = updateTattooWork(
+    parseInt(req.params.id),
+    req.body,
+    req.currentUser
+  );
+  res.status(200).json(modifiedTattoWork);
+});
+tattooistRouter.delete("/:id", async (req, res) => {
+  const deletedRes = await deleteTattooWork(
+    parseInt(req.params.id),
+    req.currentUser
+  );
+  res.status(204).json(deletedRes);
+});
+
+router.use("/my/", auth, tattooistRouter);
 
 //Admin CRUD
 const adminRouter = express.Router();
 adminRouter.use(roleCheck("super_admin"));
 
-adminRouter.get("/:id", asyncWrapper(getTattooWorkById));
-adminRouter.post("/", asyncWrapper(createTattooWork));
-adminRouter.put("/:id", asyncWrapper(updateTattooWork));
-adminRouter.delete("/:id", asyncWrapper(deleteTattooWork));
+adminRouter.post("/", async (req, res) => {
+  const createdTattooWork = createTattooWork(req.body);
+  res.status(201).json(createdTattooWork);
+});
+adminRouter.put("/:id", async (req, res) => {
+  const modifiedTattoWork = updateTattooWork(parseInt(req.params.id), req.body);
+  res.status(200).json(modifiedTattoWork);
+});
+adminRouter.delete("/:id", async (req, res) => {
+  const deletedRes = await deleteTattooWork(parseInt(req.params.id));
+  res.status(204).json(deletedRes);
+});
 
 //
-router.use("/my/", auth, tattooistRouter);
 router.use("/", auth, adminRouter);
 
 export default router;

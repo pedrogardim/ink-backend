@@ -1,4 +1,4 @@
-import { LoginPayload } from "../types/auth";
+import { UserData, LoginPayload } from "../types/users";
 
 const NAME_REGEX = /^[a-zA-Z\u00C0-\u017F ]+$/;
 const EMAIL_REGEX = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
@@ -44,16 +44,9 @@ const validationRules: ValidationRules = {
   },
 };
 
-type RegisterPayload = {
-  [key: keyof typeof validationRules]: string | number;
-};
-
-export const validateUserData = (
-  data: RegisterPayload,
-  isUpdating?: boolean
-) => {
+export const validateUserData = (data: UserData, isUpdating?: boolean) => {
   for (const fields of Object.keys(isUpdating ? data : validationRules)) {
-    const key = fields as keyof RegisterPayload;
+    const key = fields as keyof UserData;
     const rule = validationRules[key];
     if (!rule)
       throw {

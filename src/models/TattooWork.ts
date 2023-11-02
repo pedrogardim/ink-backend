@@ -24,8 +24,8 @@ export class TattooWork extends BaseEntity {
   })
   description: string;
 
-  @Column({ nullable: true, length: 2000 })
-  image_url: string;
+  @Column({ name: "image_url", nullable: true, length: 2000 })
+  imageUrl: string;
 
   @Column({ name: "tattooist_id" })
   tattooistId: number;
@@ -41,9 +41,9 @@ export class TattooWork extends BaseEntity {
   })
   type: TattooWorkType;
 
-  @CreateDateColumn()
-  created_at: Date;
+  @CreateDateColumn({ name: "created_at" })
+  createdAt: Date;
 
-  @UpdateDateColumn()
-  updated_at: Date;
+  @UpdateDateColumn({ name: "updated_at" })
+  updatedAt: Date;
 }

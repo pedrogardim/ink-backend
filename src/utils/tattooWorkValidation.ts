@@ -1,3 +1,5 @@
+import { TattooWorkData } from "../types/tattooWorks";
+
 const DESCRIPTION_REGEX = /^.{1,256}$/; // Description from 1 to 256 characters.
 const IMAGE_URL_REGEX = /^.{1,2000}$/; // URL from 1 to 2000 characters.
 const ID_REGEX = /^[0-9]+$/; // ID validation, assuming IDs are numeric.
@@ -28,18 +30,14 @@ const tattooWorkValidationRules: TattooWorkValidationRules = {
   },
 };
 
-type TattooWorkPayload = {
-  [key: keyof typeof tattooWorkValidationRules]: string | number;
-};
-
 export const validateTattooWorkData = (
-  data: TattooWorkPayload,
+  data: TattooWorkData,
   isUpdating?: boolean
 ) => {
   for (const fields of Object.keys(
     isUpdating ? data : tattooWorkValidationRules
   )) {
-    const key = fields as keyof TattooWorkPayload;
+    const key = fields as keyof TattooWorkData;
     const rule = tattooWorkValidationRules[key];
     if (!rule)
       throw {
