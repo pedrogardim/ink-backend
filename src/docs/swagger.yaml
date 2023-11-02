@@ -515,3 +515,295 @@ paths:
       responses:
         204:
           description: Appointment was deleted successfully.
+  /tattooWorks:
+    get:
+      summary: Retrieve a list of TattooWorks
+      tags:
+        - TattooWorks - Public
+      parameters:
+        - in: query
+          name: page
+          schema:
+            type: integer
+          description: Page number to fetch.
+          required: false
+          example: 1
+        - in: query
+          name: pageSize
+          schema:
+            type: integer
+          description: Number of items per page.
+          required: false
+          example: 10
+      responses:
+        200:
+          description: Returns tattooworks.
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/Pagination"
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          items:
+                            type: array
+                            items:
+                              $ref: "#/components/schemas/TattooWork"
+
+    post:
+      summary: Create a new TattooWork
+      tags:
+        - TattooWorks - Admin
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TattooWork"
+      responses:
+        201:
+          description: Successfully created TattooWork
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: "#/components/schemas/TattooWork"
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /tattooWorks/{id}:
+    get:
+      summary: Retrieve a TattooWork by ID
+      tags:
+        - TattooWorks - Public
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+          description: ID of the TattooWork to fetch
+      responses:
+        200:
+          description: Successfully retrieved TattooWork
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: "#/components/schemas/TattooWork"
+        404:
+          description: TattooWork not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+    put:
+      summary: Update a TattooWork by ID
+      tags:
+        - TattooWorks - Admin
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+          description: ID of the TattooWork to update
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TattooWork"
+      responses:
+        200:
+          description: Successfully updated TattooWork
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: "#/components/schemas/TattooWork"
+        404:
+          description: TattooWork not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    delete:
+      summary: Delete a TattooWork by ID
+      tags:
+        - TattooWorks - Admin
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+          description: ID of the TattooWork to delete
+      responses:
+        204:
+          description: Successfully deleted TattooWork
+        404:
+          description: TattooWork not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /tattooWorks/my/:
+    get:
+      summary: Retrieve a list of user's TattooWorks
+      tags:
+        - TattooWorks - Tattooist
+      parameters:
+        - in: query
+          name: page
+          schema:
+            type: integer
+          description: Page number to fetch.
+          required: false
+          example: 1
+        - in: query
+          name: pageSize
+          schema:
+            type: integer
+          description: Number of items per page.
+          required: false
+          example: 10
+      responses:
+        200:
+          description: Returns tattooworks.
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/Pagination"
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          items:
+                            type: array
+                            items:
+                              $ref: "#/components/schemas/TattooWork"
+
+    post:
+      summary: Create a new tattoo work for authenticated tattoist.
+      tags:
+        - TattooWorks - Tattooist
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TattooWork"
+      responses:
+        201:
+          description: Successfully created TattooWork
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: "#/components/schemas/TattooWork"
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /tattooWorks/my/{id}:
+    get:
+      summary: Retrieve a authenticated tattoist's TattooWork by ID
+      tags:
+        - TattooWorks - Tattooist
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+          description: ID of the TattooWork to fetch
+      responses:
+        200:
+          description: Successfully retrieved TattooWork
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: "#/components/schemas/TattooWork"
+        404:
+          description: TattooWork not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+    put:
+      summary: Update a authenticated tattoist TattooWork by ID
+      tags:
+        - TattooWorks - Tattooist
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+          description: ID of the TattooWork to update
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TattooWork"
+      responses:
+        200:
+          description: Successfully updated TattooWork
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: "#/components/schemas/TattooWork"
+        404:
+          description: TattooWork not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    delete:
+      summary: Delete a authenticated tattoist's TattooWork by ID
+      tags:
+        - TattooWorks - Tattooist
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+          description: ID of the TattooWork to delete
+      responses:
+        204:
+          description: Successfully deleted TattooWork
+        404:
+          description: TattooWork not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"

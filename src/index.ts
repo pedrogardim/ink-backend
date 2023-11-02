@@ -6,6 +6,7 @@ import { AppDataSource } from "./db";
 import authRouter from "./routes/authRoutes";
 import userRouter from "./routes/userRoutes";
 import appointmentsRouter from "./routes/appointmentRoutes";
+import tattooWorksRouter from "./routes/tattooWorksRoutes";
 import docsRouter from "./routes/docsRoutes";
 
 import { errorHandler } from "./middleware/errorHandler";
@@ -20,6 +21,7 @@ app.use(morgan("dev"));
 app.use("/api/auth", authRouter);
 app.use("/api/users", auth, userRouter);
 app.use("/api/appointments", auth, appointmentsRouter);
+app.use("/api/tattooWorks", tattooWorksRouter);
 app.use("/docs", docsRouter);
 
 app.get("/", auth, (req, res) => {

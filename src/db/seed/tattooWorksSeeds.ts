@@ -1,6 +1,6 @@
 import { Appointment, AppointmentType } from "../../models/Appointment";
 import { User } from "../../models/User";
-import { TattooWork } from "../../models/TattoWork";
+import { TattooWork } from "../../models/TattooWork";
 import { fakerES as faker } from "@faker-js/faker";
 
 export const seedTattooWorks = async (users: User[]) => {
