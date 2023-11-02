@@ -6,10 +6,12 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "seed": "ts-node src/db/seed/index.ts",
-    "start": "tsc && node dist/index.js",
+    "start": "node dist/index.js",
+    "build": "tsc",
     "dev": "nodemon --exec ts-node src/index.ts",
     "migration:generate": "typeorm-ts-node-esm migration:generate -d ./src/db/index.ts -p",
-    "migration:run": "typeorm-ts-node-esm migration:run -d ./src/db/index.ts"
+    "migration:run": "typeorm-ts-node-esm migration:run -d ./src/db/index.ts",
+    "docker:start": "npm run migration:run && npm run seed && npm start"
   },
   "repository": {
     "type": "git",
