@@ -22,11 +22,11 @@ const tattooistRouter = express.Router();
 tattooistRouter.use(roleCheck("tattooist"));
 //TODO
 
-tattooistRouter.get("/my/", asyncWrapper(getMyTattooWorks));
-tattooistRouter.get("/my/:id", asyncWrapper(getMyTattooWorkById));
-tattooistRouter.post("/my/", asyncWrapper(createMyTattooWork));
-tattooistRouter.put("/my/:id", asyncWrapper(updateMyTattooWork));
-tattooistRouter.delete("/my/:id", asyncWrapper(deleteMyTattooWork));
+tattooistRouter.get("/", asyncWrapper(getMyTattooWorks));
+tattooistRouter.get("/:id", asyncWrapper(getMyTattooWorkById));
+tattooistRouter.post("/", asyncWrapper(createMyTattooWork));
+tattooistRouter.put("/:id", asyncWrapper(updateMyTattooWork));
+tattooistRouter.delete("/:id", asyncWrapper(deleteMyTattooWork));
 
 //Admin CRUD
 const adminRouter = express.Router();
@@ -38,6 +38,7 @@ adminRouter.post("/", asyncWrapper(createTattooWork));
 adminRouter.put("/:id", asyncWrapper(updateTattooWork));
 adminRouter.delete("/:id", asyncWrapper(deleteTattooWork));
 
+router.use("/my/", tattooistRouter);
 router.use("/", adminRouter);
 
 export default router;
