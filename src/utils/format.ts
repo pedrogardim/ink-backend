@@ -19,7 +19,7 @@ export const formatUser = (user: User) => ({
   password: undefined,
 });
 
-export const formatAppointment = (appointment: Appointment, req: any) => ({
+export const formatAppointment = (appointment: Appointment) => ({
   kind: "appointment",
   self: `${BASE_URL}/appointments/${appointment.id}`,
   ...appointment,
