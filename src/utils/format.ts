@@ -4,6 +4,14 @@ import { TattooWork } from "../models/TattooWork";
 
 export const BASE_URL = process.env.BASE_URL as string;
 
+export const formatAuthentication = (token: string, user: User) => ({
+  kind: "authentication",
+  token,
+  tokenIat: new Date(),
+  tokenExp: new Date(Date.now() + 1000 * 60 * 60),
+  user: formatUser(user),
+});
+
 export const formatUser = (user: User) => ({
   kind: "user",
   self: `${BASE_URL}/users/${user.id}`,
