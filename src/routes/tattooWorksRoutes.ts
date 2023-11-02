@@ -12,21 +12,14 @@ import { auth } from "../middleware/auth";
 
 const router = express.Router();
 
-//Public
-
-router.get("/", async (req, res) => {
-  const tattooWorks = await getTattooWorks(req.query);
-  res.status(200).json(tattooWorks);
-});
-
-router.get("/:id", async (req, res) => {
-  const tattooWork = await getTattooWorkById(parseInt(req.params.id));
-  res.status(200).json(tattooWork);
-});
-
 //User - Tattooist CRUD
 const tattooistRouter = express.Router();
 tattooistRouter.use(roleCheck("tattooist"));
+
+tattooistRouter.get("/", async (req, res) => {
+  const tattooWorks = await getTattooWorks(req.query, req.currentUser);
+  res.status(200).json(tattooWorks);
+});
 
 tattooistRouter.post("/", async (req, res) => {
   const createdTattooWork = createTattooWork(req.body, req.currentUser);
@@ -65,6 +58,18 @@ adminRouter.put("/:id", async (req, res) => {
 adminRouter.delete("/:id", async (req, res) => {
   const deletedRes = await deleteTattooWork(parseInt(req.params.id));
   res.status(204).json(deletedRes);
+});
+
+//Public
+
+router.get("/", async (req, res) => {
+  const tattooWorks = await getTattooWorks(req.query);
+  res.status(200).json(tattooWorks);
+});
+
+router.get("/:id", async (req, res) => {
+  const tattooWork = await getTattooWorkById(parseInt(req.params.id));
+  res.status(200).json(tattooWork);
 });
 
 //
