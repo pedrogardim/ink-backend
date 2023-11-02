@@ -6,7 +6,6 @@ import {
   updateTattooWork,
   deleteTattooWork,
 } from "../controllers/tattooWorksControllers";
-import { asyncWrapper } from "../utils/wrappers";
 import { roleCheck } from "../middleware/roleCheck";
 import { auth } from "../middleware/auth";
 

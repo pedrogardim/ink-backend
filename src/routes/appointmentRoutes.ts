@@ -1,6 +1,4 @@
 import express from "express";
-
-import { asyncWrapper } from "../utils/wrappers";
 import { roleCheck } from "../middleware/roleCheck";
 import {
   createAppointment,
