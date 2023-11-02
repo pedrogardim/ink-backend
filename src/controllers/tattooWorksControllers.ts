@@ -1,5 +1,4 @@
 import { Handler } from "express";
-import bcrypt from "bcrypt";
 import { TattooWork } from "../models/TattooWork";
 import { formatPaginationResponse, formatTattooWork } from "../utils/format";
 import { validateTattooWorkData } from "../utils/tattooWorkValidation";
@@ -40,11 +39,7 @@ export const getTattooWorks: Handler = async (req, res) => {
 
 export const createTattooWork: Handler = async (req, res) => {
   validateTattooWorkData(req.body);
-  const encryptedPassword = await bcrypt.hash(req.body.password, 10);
-  const createdTattooWork = await TattooWork.create({
-    ...req.body,
-    password: encryptedPassword,
-  }).save();
+  const createdTattooWork = await TattooWork.create(req.body).save();
   res.status(201).json({ data: formatTattooWork(createdTattooWork, req) });
 };
 
