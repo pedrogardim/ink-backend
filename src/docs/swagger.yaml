@@ -1,15 +1,12 @@
 openapi: "3.0.0"
 info:
   title: Tatto Studio API
-  description: A API made in Express to manage appointments on a tattoo. Features auth system with JWT, form validation.
+  description: A API made in Express to manage appointments on a tattoo studio. Features auth system with JWT, form validation.
   version: 0.0.1
   contact:
     name: Pedro Gardim
     url: https://pedrogardim.com
     email: me@pedrogardim.com
-host: api.example.com
-schemes:
-  - http
 servers:
   - url: "http://localhost:3000/api"
 security:
@@ -21,8 +18,6 @@ paths:
         - Authentication
       summary: Registers a new user
       description: To register new users, both for tattooists and clients. Returns JWT and created user info.
-      produces:
-        - application/json
       requestBody:
         required: true
         content:
@@ -43,8 +38,6 @@ paths:
         - Authentication
       summary: Logins a new user
       description: To login new users, both for tattooists and clients. Returns JWT and user info.
-      produces:
-        - application/json
       requestBody:
         required: true
         content:
@@ -64,8 +57,6 @@ paths:
         - Users
       summary: Get auth user profile.
       description: Get profile info from currently authenticated user, through JWT decoding.
-      produces:
-        - application/json
       responses:
         200:
           description: Returns user info.
@@ -78,8 +69,6 @@ paths:
         - Users
       summary: Update auth user profile.
       description: Get profile info from currently authenticated user, through JWT decoding.
-      produces:
-        - application/json
       requestBody:
         required: true
         content:
@@ -98,8 +87,6 @@ paths:
         - Users
       summary: Delete auth user.
       description: Delete the currentlu authenticated user, through JWT decoding.
-      produces:
-        - application/json
       responses:
         204:
           description: Confirms the user whas deleted.
@@ -109,8 +96,6 @@ paths:
         - Users
       summary: List all tattooists.
       description: For users to get all tattooists, and then pick one for creating a appointment.
-      produces:
-        - application/json
       parameters:
         - in: query
           name: page
@@ -141,14 +126,116 @@ paths:
                             type: array
                             items:
                               $ref: "#/components/schemas/User"
+  /appointments/my:
+    get:
+      tags:
+        - User Appointments
+      summary: Get all of the current user's appointments.
+      description: Retrieve a paginated list of appointments for the currently authenticated user.
+      parameters:
+        - in: query
+          name: page
+          schema:
+            type: integer
+          required: false
+          description: Index of the page.
+        - in: query
+          name: pageSize
+          schema:
+            type: integer
+          required: false
+          description: Number of items to return each page.
+      responses:
+        200:
+          description: Returns paginated list of user appointments.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AppointmentPaginationResponse"
+    post:
+      tags:
+        - User Appointments
+      summary: Request a new appointment.
+      description: Clients can request a new appointment with this endpoint.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AppointmentPayload"
+      responses:
+        200:
+          description: Returns created appointment details.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AppointmentResponse"
+  /appointments/my/{id}:
+    get:
+      tags:
+        - User Appointments
+      summary: Get specific appointment details of the current user by ID.
+      description: Retrieve details of a specific appointment by ID for the currently authenticated user.
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+          description: ID of appointment to retrieve.
+      responses:
+        200:
+          description: Returns appointment details.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AppointmentResponse"
+    put:
+      tags:
+        - User Appointments
+      summary: Update specific appointment details of the current user by ID.
+      description: Modify details of a specific appointment by ID for the currently authenticated user.
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+          description: ID of appointment to modify.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AppointmentUpdatePayload"
+      responses:
+        200:
+          description: Returns updated appointment details.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AppointmentResponse"
+    delete:
+      tags:
+        - User Appointments
+      summary: Delete a specific appointment of the current user by ID.
+      description: Remove a specific appointment by ID for the currently authenticated user.
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+          description: ID of appointment to delete.
+      responses:
+        204:
+          description: Appointment was deleted successfully.
   /users/:
     get:
       tags:
         - Users - Admin CRUD
       summary: List all users.
       description: For admin. Returns all users using pagination
-      produces:
-        - application/json
       parameters:
         - in: query
           name: page
@@ -184,8 +271,6 @@ paths:
         - Users - Admin CRUD
       summary: Create a new user
       description: For admin. Creates a new user.
-      produces:
-        - application/json
       requestBody:
         required: true
         content:
@@ -205,8 +290,6 @@ paths:
         - Users - Admin CRUD
       summary: Retrieve a user by ID.
       description: For admin. Retrieves an user by ID
-      produces:
-        - application/json
       parameters:
         - in: path
           name: id
@@ -226,8 +309,6 @@ paths:
         - Users - Admin CRUD
       summary: Update a user by ID.
       description: For admin. Update an user info by ID
-      produces:
-        - application/json
       parameters:
         - in: path
           name: id
@@ -253,8 +334,6 @@ paths:
         - Users - Admin CRUD
       summary: Delete an user by ID.
       description: For admin. Delete an user by ID
-      produces:
-        - application/json
       parameters:
         - in: path
           name: id
@@ -271,8 +350,6 @@ paths:
         - Users - Admin CRUD
       summary: Set a registed user as tattooist.
       description: For admin. In this API, a tattooist would have to register as a client first, an then the admin would set the user as a tattooist.
-      produces:
-        - application/json
       parameters:
         - in: path
           name: id
@@ -287,128 +364,12 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/UserDataWrapper"
-  /appointments/my:
-    get:
-      tags:
-        - User Appointments
-      summary: Get all of the current user's appointments.
-      description: Retrieve a paginated list of appointments for the currently authenticated user.
-      produces:
-        - application/json
-      parameters:
-        - in: query
-          name: page
-          schema:
-            type: integer
-          required: false
-          description: Index of the page.
-        - in: query
-          name: pageSize
-          schema:
-            type: integer
-          required: false
-          description: Number of items to return each page.
-      responses:
-        200:
-          description: Returns paginated list of user appointments.
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/AppointmentPaginationResponse"
-    post:
-      tags:
-        - User Appointments
-      summary: Request a new appointment.
-      description: Clients can request a new appointment with this endpoint.
-      produces:
-        - application/json
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/AppointmentPayload"
-      responses:
-        200:
-          description: Returns created appointment details.
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/AppointmentResponse"
-  /appointments/my/{id}:
-    get:
-      tags:
-        - User Appointments
-      summary: Get specific appointment details of the current user by ID.
-      description: Retrieve details of a specific appointment by ID for the currently authenticated user.
-      produces:
-        - application/json
-      parameters:
-        - in: path
-          name: id
-          schema:
-            type: integer
-          required: true
-          description: ID of appointment to retrieve.
-      responses:
-        200:
-          description: Returns appointment details.
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/AppointmentResponse"
-    put:
-      tags:
-        - User Appointments
-      summary: Update specific appointment details of the current user by ID.
-      description: Modify details of a specific appointment by ID for the currently authenticated user.
-      produces:
-        - application/json
-      parameters:
-        - in: path
-          name: id
-          schema:
-            type: integer
-          required: true
-          description: ID of appointment to modify.
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/AppointmentUpdatePayload"
-      responses:
-        200:
-          description: Returns updated appointment details.
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/AppointmentResponse"
-    delete:
-      tags:
-        - User Appointments
-      summary: Delete a specific appointment of the current user by ID.
-      description: Remove a specific appointment by ID for the currently authenticated user.
-      produces:
-        - application/json
-      parameters:
-        - in: path
-          name: id
-          schema:
-            type: integer
-          required: true
-          description: ID of appointment to delete.
-      responses:
-        204:
-          description: Appointment was deleted successfully.
   /appointments/:
     get:
       tags:
         - Appointments - Admin CRUD
       summary: List all appointments.
       description: For admins. Returns a paginated list of all appointments.
-      produces:
-        - application/json
       parameters:
         - in: query
           name: page
@@ -434,8 +395,6 @@ paths:
         - Appointments - Admin CRUD
       summary: Create a new appointment.
       description: For admins. Creates a new appointment.
-      produces:
-        - application/json
       requestBody:
         required: true
         content:
@@ -455,8 +414,6 @@ paths:
         - Appointments - Admin CRUD
       summary: Retrieve a specific appointment by ID.
       description: For admins. Retrieve details of a specific appointment by ID.
-      produces:
-        - application/json
       parameters:
         - in: path
           name: id
@@ -476,8 +433,6 @@ paths:
         - Appointments - Admin CRUD
       summary: Update a specific appointment by ID.
       description: For admins. Modify details of a specific appointment by ID.
-      produces:
-        - application/json
       parameters:
         - in: path
           name: id
@@ -503,8 +458,6 @@ paths:
         - Appointments - Admin CRUD
       summary: Delete a specific appointment by ID.
       description: For admins. Remove a specific appointment by ID.
-      produces:
-        - application/json
       parameters:
         - in: path
           name: id
@@ -515,152 +468,6 @@ paths:
       responses:
         204:
           description: Appointment was deleted successfully.
-  /tattooWorks:
-    get:
-      summary: Retrieve a list of TattooWorks
-      tags:
-        - TattooWorks - Public
-      parameters:
-        - in: query
-          name: page
-          schema:
-            type: integer
-          description: Page number to fetch.
-          required: false
-          example: 1
-        - in: query
-          name: pageSize
-          schema:
-            type: integer
-          description: Number of items per page.
-          required: false
-          example: 10
-      responses:
-        200:
-          description: Returns tattooworks.
-          content:
-            application/json:
-              schema:
-                allOf:
-                  - $ref: "#/components/schemas/Pagination"
-                  - type: object
-                    properties:
-                      data:
-                        type: object
-                        properties:
-                          items:
-                            type: array
-                            items:
-                              $ref: "#/components/schemas/TattooWork"
-
-    post:
-      summary: Create a new TattooWork
-      tags:
-        - TattooWorks - Admin
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/TattooWorkPayload"
-      responses:
-        201:
-          description: Successfully created TattooWork
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  data:
-                    $ref: "#/components/schemas/TattooWork"
-        default:
-          description: Unexpected error
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
-  /tattooWorks/{id}:
-    get:
-      summary: Retrieve a TattooWork by ID
-      tags:
-        - TattooWorks - Public
-      parameters:
-        - in: path
-          name: id
-          schema:
-            type: integer
-          required: true
-          description: ID of the TattooWork to fetch
-      responses:
-        200:
-          description: Successfully retrieved TattooWork
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  data:
-                    $ref: "#/components/schemas/TattooWork"
-        404:
-          description: TattooWork not found
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
-
-    put:
-      summary: Update a TattooWork by ID
-      tags:
-        - TattooWorks - Admin
-      parameters:
-        - in: path
-          name: id
-          schema:
-            type: integer
-          required: true
-          description: ID of the TattooWork to update
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/TattooWorkPayload"
-      responses:
-        200:
-          description: Successfully updated TattooWork
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  data:
-                    $ref: "#/components/schemas/TattooWork"
-        404:
-          description: TattooWork not found
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
-    delete:
-      summary: Delete a TattooWork by ID
-      tags:
-        - TattooWorks - Admin
-      parameters:
-        - in: path
-          name: id
-          schema:
-            type: integer
-          required: true
-          description: ID of the TattooWork to delete
-      responses:
-        204:
-          description: Successfully deleted TattooWork
-        404:
-          description: TattooWork not found
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
   /tattooWorks/my/:
     get:
       summary: Retrieve a list of user's TattooWorks
@@ -791,6 +598,153 @@ paths:
       summary: Delete a authenticated tattoist's TattooWork by ID
       tags:
         - TattooWorks - Tattooist
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+          description: ID of the TattooWork to delete
+      responses:
+        204:
+          description: Successfully deleted TattooWork
+        404:
+          description: TattooWork not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /tattooWorks:
+    get:
+      summary: Retrieve a list of TattooWorks
+      tags:
+        - TattooWorks - Public
+      parameters:
+        - in: query
+          name: page
+          schema:
+            type: integer
+          description: Page number to fetch.
+          required: false
+          example: 1
+        - in: query
+          name: pageSize
+          schema:
+            type: integer
+          description: Number of items per page.
+          required: false
+          example: 10
+      responses:
+        200:
+          description: Returns tattooworks.
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/Pagination"
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          items:
+                            type: array
+                            items:
+                              $ref: "#/components/schemas/TattooWork"
+
+    post:
+      summary: Create a new TattooWork
+      tags:
+        - TattooWorks - Admin
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TattooWorkPayload"
+      responses:
+        201:
+          description: Successfully created TattooWork
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: "#/components/schemas/TattooWork"
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /tattooWorks/{id}:
+    get:
+      summary: Retrieve a TattooWork by ID
+      tags:
+        - TattooWorks - Public
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+          description: ID of the TattooWork to fetch
+      responses:
+        200:
+          description: Successfully retrieved TattooWork
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: "#/components/schemas/TattooWork"
+        404:
+          description: TattooWork not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+    put:
+      summary: Update a TattooWork by ID
+      tags:
+        - TattooWorks - Admin
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+          description: ID of the TattooWork to update
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TattooWorkPayload"
+      responses:
+        200:
+          description: Successfully updated TattooWork
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: "#/components/schemas/TattooWork"
+        404:
+          description: TattooWork not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    delete:
+      summary: Delete a TattooWork by ID
+      tags:
+        - TattooWorks - Admin
       parameters:
         - in: path
           name: id
