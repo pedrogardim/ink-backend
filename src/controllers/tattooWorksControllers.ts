@@ -65,25 +65,27 @@ export const deleteTattooWork: Handler = async (req, res) => {
   res.status(204).json(tattooWorkDeleted);
 };
 
-//User endpoints
+//Tattooist endpoints
 
 export const getMyTattooWorkById: Handler = async (req, res) => {
+  const { userId } = req.currentUser;
   const tattooWork = await TattooWork.findOne({
     relations: ["tattooist"],
-    where: { id: parseInt(req.params.id) },
+    where: { id: parseInt(req.params.id), tattooistId: userId },
   });
   if (!tattooWork) throw { code: 404, message: "Tatto work not found" };
   res.status(200).json({ data: formatTattooWork(tattooWork, req) });
 };
 
 export const getMyTattooWorks: Handler = async (req, res) => {
+  const { userId } = req.currentUser;
   let { pageSize = 10, page = 1 } = req.query;
   pageSize = parseInt(pageSize as string);
   page = parseInt(page as string);
 
   const [tattooWorks, totalItems] = await TattooWork.findAndCount({
     relations: ["tattooist"],
-    where: req.body,
+    where: { ...req.body, tattooistId: userId },
     take: pageSize,
     skip: (page - 1) * pageSize,
   });
@@ -100,16 +102,27 @@ export const getMyTattooWorks: Handler = async (req, res) => {
 };
 
 export const createMyTattooWork: Handler = async (req, res) => {
-  validateTattooWorkData(req.body);
-  const createdTattooWork = await TattooWork.create(req.body).save();
+  const { userId } = req.currentUser;
+  validateTattooWorkData({ ...req.body, tattooistId: userId });
+  const createdTattooWork = await TattooWork.create({
+    ...req.body,
+    tattooistId: userId,
+  }).save();
   res.status(201).json({ data: formatTattooWork(createdTattooWork, req) });
 };
 
 export const updateMyTattooWork: Handler = async (req, res) => {
+  const { userId } = req.currentUser;
   validateTattooWorkData(req.body, true);
+  if (
+    req.body.hasOwnProperty("tattooistId") ||
+    req.body.hasOwnProperty("tattooist")
+  )
+    throw { code: 400, message: "You can't change your work creator" };
   const tattooWorkRepository = AppDataSource.getRepository(TattooWork);
   let tattooWork = await tattooWorkRepository.findOneBy({
     id: parseInt(req.params.id),
+    tattooistId: userId,
   });
   if (!tattooWork) throw { code: 404, message: "Tattoo work not found" };
   tattooWork = { ...tattooWork, ...req.body };
@@ -119,8 +132,10 @@ export const updateMyTattooWork: Handler = async (req, res) => {
 };
 
 export const deleteMyTattooWork: Handler = async (req, res) => {
+  const { userId } = req.currentUser;
   const tattooWorkDeleted = await TattooWork.delete({
     id: parseInt(req.params.id),
+    tattooistId: userId,
   });
   if (!tattooWorkDeleted.affected)
     throw { code: 404, message: "Tattoo work not found" };
