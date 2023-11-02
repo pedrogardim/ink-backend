@@ -7,10 +7,11 @@ import { AppDataSource } from "../db";
 
 //Admin CRUD
 export const getTattooWorkById: Handler = async (req, res) => {
-  const tattooWork = await TattooWork.findOneBy({
-    id: parseInt(req.params.id),
+  const tattooWork = await TattooWork.findOne({
+    relations: ["tattooist"],
+    where: { id: parseInt(req.params.id) },
   });
-  if (!tattooWork) throw { code: 404, message: "TattooWork not found" };
+  if (!tattooWork) throw { code: 404, message: "Tatto work not found" };
   res.status(200).json({ data: formatTattooWork(tattooWork, req) });
 };
 
@@ -20,6 +21,7 @@ export const getTattooWorks: Handler = async (req, res) => {
   page = parseInt(page as string);
 
   const [tattooWorks, totalItems] = await TattooWork.findAndCount({
+    relations: ["tattooist"],
     where: req.body,
     take: pageSize,
     skip: (page - 1) * pageSize,
@@ -52,7 +54,7 @@ export const updateTattooWork: Handler = async (req, res) => {
   let tattooWork = await tattooWorkRepository.findOneBy({
     id: parseInt(req.params.id),
   });
-  if (!tattooWork) throw { code: 404, message: "TattooWork not found" };
+  if (!tattooWork) throw { code: 404, message: "Tattoo work not found" };
   tattooWork = { ...tattooWork, ...req.body };
   res
     .status(200)
@@ -64,6 +66,6 @@ export const deleteTattooWork: Handler = async (req, res) => {
     id: parseInt(req.params.id),
   });
   if (!tattooWorkDeleted.affected)
-    throw { code: 404, message: "TattooWork not found" };
+    throw { code: 404, message: "Tattoo work not found" };
   res.status(204).json(tattooWorkDeleted);
 };
