@@ -16,7 +16,7 @@ export const seedTattooWorks = async (users: User[]) => {
       const workType = faker.helpers.arrayElement(randomTypes);
       return TattooWork.create({
         description: faker.lorem.text().slice(0, 256),
-        image_url: `https://source.unsplash.com/featured/?${workType}-${i}`,
+        imageUrl: `https://source.unsplash.com/featured/?${workType}-${i}`,
         tattooist: faker.helpers.arrayElement(tattooists),
         type: workType,
       });
