@@ -519,7 +519,7 @@ paths:
     get:
       summary: Retrieve a list of TattooWorks
       tags:
-        - TattooWorks - Admin
+        - TattooWorks - Public
       parameters:
         - in: query
           name: page
@@ -583,7 +583,7 @@ paths:
     get:
       summary: Retrieve a TattooWork by ID
       tags:
-        - TattooWorks - Admin
+        - TattooWorks - Public
       parameters:
         - in: path
           name: id
