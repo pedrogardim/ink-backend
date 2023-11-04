@@ -46,6 +46,29 @@ You'll need add a `.env` based on the provided `.env.example` file with the data
 
 Access the Swagger documentation at `http://localhost:3000/api-docs`.
 
+## Database Design 📖
+
+<img width="803" alt="ERD" src="https://github.com/pedrogardim/tattoo-booking-api/assets/81443264/09e7a113-6d4b-4615-9e97-e98d3427e61a">
+
+### Relationships
+
+- `Users` to `Appointments`: Double one-to-many relationship where:
+  - One user (as a client) can have many appointments.
+  - One user (as a tattooist) can be associated with many appointments.
+- `Users` to `Tattoo Works`: One-to-many relationship where one tattooist can have many works
+
+### Indices and Constraints
+
+- `Users` table:
+  - Unique constraint on `email` to ensure each user has a unique email address.
+- `Appointments` and `Tattoo Works` tables:
+  - Foreign key constraint on `client_id` and `tattooist_id` referring to `id` in the `Users` table.
+
+### Additional Notes
+
+- Passwords are stored as hashed values using [bcrypt](https://github.com/kelektiv/node.bcrypt.js).
+- The database is set up with UTF-8 character encoding to support international characters.
+
 ## API Endpoints 🔌
 
 Check the swagger documentation for a complete documentation of the API endpoints.
