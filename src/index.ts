@@ -23,7 +23,7 @@ app.use("/api/auth", authRouter);
 app.use("/api/users", auth, userRouter);
 app.use("/api/appointments", auth, appointmentsRouter);
 app.use("/api/tattooWorks", tattooWorksRouter);
-app.use("/api/docs", docsRouter);
+app.use("/api-docs", docsRouter);
 
 app.get("/", auth, (req, res) => {
   return res.json("Hi");
@@ -34,6 +34,6 @@ app.use(errorHandler);
 AppDataSource.initialize().then(() => {
   app.listen(process.env.PORT, () => {
     console.log(`App listening on port:${process.env.PORT}`);
-    console.log(`Swagger available on: ${process.env.BASE_URL}/docs`);
+    console.log(`Swagger available on: ${process.env.BASE_URL}-docs`);
   });
 });

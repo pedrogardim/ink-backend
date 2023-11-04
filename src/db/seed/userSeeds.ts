@@ -10,7 +10,7 @@ export const seedUsers = async () => {
     .fill(null)
     .map(() =>
       User.create({
-        email: faker.internet.email(),
+        email: faker.internet.email().toLowerCase(),
         password: bcrypt.hashSync("1234", 1),
         firstName: faker.person.firstName(),
         lastName: faker.person.lastName(),
