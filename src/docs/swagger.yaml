@@ -533,34 +533,6 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
   /tattooWorks/my/{id}:
-    get:
-      summary: Retrieve a authenticated tattoist's TattooWork by ID
-      tags:
-        - TattooWorks - Tattooist
-      parameters:
-        - in: path
-          name: id
-          schema:
-            type: integer
-          required: true
-          description: ID of the TattooWork to fetch
-      responses:
-        200:
-          description: Successfully retrieved TattooWork
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  data:
-                    $ref: "#/components/schemas/TattooWork"
-        404:
-          description: TattooWork not found
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
-
     put:
       summary: Update a authenticated tattoist TattooWork by ID
       tags:

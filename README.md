@@ -20,7 +20,7 @@ Get a copy of the project up and running on your local machine for development a
 
 ```sh
 git clone https://github.com/pedrogardim/tattoo-booking-api.git
-cd inkhouse-tattoo-studio-api
+cd tattoo-booking-api
 ```
 
 #### Running with Docker 🛠️
@@ -90,7 +90,6 @@ Check the swagger documentation for a complete documentation of the API endpoint
 
 - `GET /api/tattooWorks/my` - Retrieve a tattooist's works.
 - `POST /api/tattooWorks/my` - Create a new work for the authenticated tattooist.
-- `GET /api/tattooWorks/my/{id}` - Retrieve a specific tattoo work by ID.
 - `PUT /api/tattooWorks/my/{id}` - Update a specific tattoo work by ID.
 - `DELETE /api/tattooWorks/my/{id}` - Delete a specific tattoo work by ID.
 
