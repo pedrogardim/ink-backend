@@ -70,12 +70,12 @@ adminRouter.put("/:id", async (req, res) => {
     parseInt(req.params.id),
     req.body
   );
-  res.status(204).json(appointments);
+  res.status(200).json(appointments);
 });
 
 adminRouter.delete("/:id", async (req, res) => {
-  const appointments = await deleteAppointment(parseInt(req.params.id));
-  res.status(204).json(appointments);
+  const deleteRes = await deleteAppointment(parseInt(req.params.id));
+  res.status(204).json(deleteRes);
 });
 
 router.use("/", adminRouter);

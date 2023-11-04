@@ -21,11 +21,11 @@ tattooistRouter.get("/", async (req, res) => {
 });
 
 tattooistRouter.post("/", async (req, res) => {
-  const createdTattooWork = createTattooWork(req.body, req.currentUser);
+  const createdTattooWork = await createTattooWork(req.body, req.currentUser);
   res.status(201).json(createdTattooWork);
 });
 tattooistRouter.put("/:id", async (req, res) => {
-  const modifiedTattoWork = updateTattooWork(
+  const modifiedTattoWork = await updateTattooWork(
     parseInt(req.params.id),
     req.body,
     req.currentUser
@@ -47,11 +47,14 @@ const adminRouter = express.Router();
 adminRouter.use(roleCheck("super_admin"));
 
 adminRouter.post("/", async (req, res) => {
-  const createdTattooWork = createTattooWork(req.body);
+  const createdTattooWork = await createTattooWork(req.body);
   res.status(201).json(createdTattooWork);
 });
 adminRouter.put("/:id", async (req, res) => {
-  const modifiedTattoWork = updateTattooWork(parseInt(req.params.id), req.body);
+  const modifiedTattoWork = await updateTattooWork(
+    parseInt(req.params.id),
+    req.body
+  );
   res.status(200).json(modifiedTattoWork);
 });
 adminRouter.delete("/:id", async (req, res) => {
