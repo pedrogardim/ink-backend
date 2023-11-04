@@ -16,7 +16,7 @@ const tattooWorkValidationRules: TattooWorkValidationRules = {
     validation: (desc) => DESCRIPTION_REGEX.test(desc),
     required: true,
   },
-  image_url: {
+  imageUrl: {
     validation: (url) => IMAGE_URL_REGEX.test(url),
     required: false,
   },
