@@ -204,7 +204,7 @@ components:
         createdAt:
           type: string
           format: date-time
-        updated_at:
+        updatedAt:
           type: string
           format: date-time
         client:
@@ -245,7 +245,7 @@ components:
           type: string
           maxLength: 256
           description: Description of the tattoo work.
-        image_url:
+        imageUrl:
           type: string
           maxLength: 2000
           description: URL where the tattoo photo can be found.
@@ -261,11 +261,11 @@ components:
             - tattoo
             - piercing
           description: Type of work, either "tattoo" or "piercing".
-        created_at:
+        createdAt:
           type: string
           format: date-time
           description: Date and time when the tattoo work was created.
-        updated_at:
+        updatedAt:
           type: string
           format: date-time
           description: Date and time when the tattoo work was last updated.
@@ -276,7 +276,7 @@ components:
           type: string
           maxLength: 256
           description: Description of the tattoo work.
-        image_url:
+        imageUrl:
           type: string
           maxLength: 2000
           description: URL where the tattoo photo can be found.

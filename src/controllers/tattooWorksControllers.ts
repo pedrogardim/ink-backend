@@ -21,10 +21,7 @@ export const getTattooWorks = async (
   pageSize = parseInt(pageSize as string);
   page = parseInt(page as string);
 
-  if (user) {
-    const { role, userId } = user;
-    query[role === "tattooist" ? "tattooistId" : "clientId"] = userId;
-  }
+  if (user) query.tattooistId = user.userId;
 
   delete query.page;
   delete query.pageSize;
