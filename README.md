@@ -2,6 +2,33 @@
 
 Welcome to the Tattoo Studio API documentation. This robust API manages user authentication, appointment scheduling, and tattoo artist portfolios. It's the 4th project of the GeeksHub Academy Fullstack Bootcamp, showcasing real-world backend development skills with TypeScript and Express.
 
+## Table of Contents 🗂️
+
+- [Stack 🛠️](#stack)
+- [Features 🌟](#features-)
+- [Installation 🚀](#installation-)
+  - [Running with Docker ⚓️](#running-with-docker-️)
+  - [Running directly with Node](#running-directly-with-node)
+- [API Documentation 📘](#api-documentation-)
+- [Database Design 📖](#database-design-)
+  - [Relationships](#relationships)
+  - [Indices and Constraints](#indices-and-constraints)
+- [API Endpoints 🔌](#api-endpoints-)
+- [Author ✒️](#author-)
+- [Roadmap 🛣️](#roadmap-️)
+- [Acknowledgements 🎓](#acknowledgements-)
+
+## Stack 🛠️
+
+<img src="https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white" alt="TypeScript" />
+<img src="https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=node.js&logoColor=white" alt="Node.js" />
+<img src="https://img.shields.io/badge/Express.js-000000?style=for-the-badge&logo=express&logoColor=white" alt="Express.js" />
+<img src="https://img.shields.io/badge/MySQL-4479A1?style=for-the-badge&logo=mysql&logoColor=white" alt="MySQL" />
+<img src="https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white" alt="Docker" />
+<img src="https://img.shields.io/badge/Swagger-85EA2D?style=for-the-badge&logo=swagger&logoColor=black" alt="Swagger" />
+<img src="https://img.shields.io/badge/Postman-FF6C37?style=for-the-badge&logo=postman&logoColor=white" alt="Postman" />
+<img src="https://img.shields.io/badge/JWT-000000?style=for-the-badge&logo=jsonwebtokens&logoColor=white" alt="JWT" />
+
 ## Features 🌟
 
 - **User Authentication:** Secure signup and login processes. 🔒
@@ -14,7 +41,7 @@ Welcome to the Tattoo Studio API documentation. This robust API manages user aut
 - **MySQL Database with TypeORM and Migrations:** Robust database management. 🗄️
 - **Mock Data Generation:** Realistic data generation with Faker.js. 🤖
 
-## Getting Started 🚀
+## Installation 🚀
 
 Get a copy of the project up and running on your local machine for development and testing purposes.
 
@@ -23,7 +50,7 @@ git clone https://github.com/pedrogardim/tattoo-booking-api.git
 cd tattoo-booking-api
 ```
 
-#### Running with Docker 🛠️
+#### Running with Docker ⚓️
 
 ```sh
 docker-compose up --build
@@ -45,6 +72,24 @@ You'll need add a `.env` based on the provided `.env.example` file with the data
 ## API Documentation 📘
 
 Access the Swagger documentation at `http://localhost:3000/api-docs`.
+
+## Database Design 📖
+
+<img width="803" alt="ERD" src="https://github.com/pedrogardim/tattoo-booking-api/assets/81443264/09e7a113-6d4b-4615-9e97-e98d3427e61a">
+
+### Relationships
+
+- `Users` to `Appointments`: Double one-to-many relationship where:
+  - One user (as a client) can have many appointments.
+  - One user (as a tattooist) can be associated with many appointments.
+- `Users` to `Tattoo Works`: One-to-many relationship where one tattooist can have many works
+
+### Indices and Constraints
+
+- `Users` table:
+  - Unique constraint on `email` to ensure each user has a unique email address.
+- `Appointments` and `Tattoo Works` tables:
+  - Foreign key constraint on `client_id` and `tattooist_id` referring to `id` in the `Users` table.
 
 ## API Endpoints 🔌
 
