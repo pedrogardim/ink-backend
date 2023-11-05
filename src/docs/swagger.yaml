@@ -8,7 +8,10 @@ info:
     url: https://pedrogardim.com
     email: me@pedrogardim.com
 servers:
+  - url: "https://tattoo-booking-api-production.up.railway.app/api"
+    description: Deployed Railway server
   - url: "http://localhost:3000/api"
+    description: Local development server
 security:
   - bearerAuth: []
 paths:
