@@ -6,6 +6,7 @@ Welcome to the Tattoo Studio API documentation. This robust API manages user aut
 
 - [Stack 🛠️](#stack)
 - [Features 🌟](#features-)
+- [Live Deployment 📡](#live-deployment-)
 - [Installation 🚀](#installation-)
   - [Running with Docker ⚓️](#running-with-docker-️)
   - [Running directly with Node](#running-directly-with-node)
@@ -20,7 +21,7 @@ Welcome to the Tattoo Studio API documentation. This robust API manages user aut
 
 ## Stack 🛠️
 
-<img src="https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white" alt="TypeScript" /><img src="https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=node.js&logoColor=white" alt="Node.js" /><img src="https://img.shields.io/badge/Express.js-000000?style=for-the-badge&logo=express&logoColor=white" alt="Express.js" /><img src="https://img.shields.io/badge/MySQL-4479A1?style=for-the-badge&logo=mysql&logoColor=white" alt="MySQL" /><img src="https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white" alt="Docker" /><img src="https://img.shields.io/badge/Swagger-85EA2D?style=for-the-badge&logo=swagger&logoColor=black" alt="Swagger" /><img src="https://img.shields.io/badge/Postman-FF6C37?style=for-the-badge&logo=postman&logoColor=white" alt="Postman" /><img src="https://img.shields.io/badge/JWT-000000?style=for-the-badge&logo=jsonwebtokens&logoColor=white" alt="JWT" />
+<img src="https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white" alt="TypeScript" /><img src="https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=node.js&logoColor=white" alt="Node.js" /><img src="https://img.shields.io/badge/Express.js-000000?style=for-the-badge&logo=express&logoColor=white" alt="Express.js" /><img src="https://img.shields.io/badge/MySQL-4479A1?style=for-the-badge&logo=mysql&logoColor=white" alt="MySQL" /><img src="https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white" alt="Docker" /><img src="https://img.shields.io/badge/JWT-000000?style=for-the-badge&logo=jsonwebtokens&logoColor=white" alt="JWT" /><img src="https://img.shields.io/badge/Swagger-85EA2D?style=for-the-badge&logo=swagger&logoColor=black" alt="Swagger" /><img src="https://img.shields.io/badge/Postman-FF6C37?style=for-the-badge&logo=postman&logoColor=white" alt="Postman" /><img src="https://img.shields.io/badge/railway-000000?style=for-the-badge&logo=railway&logoColor=white" alt="JWT" />
 
 ## Features 🌟
 
@@ -33,6 +34,14 @@ Welcome to the Tattoo Studio API documentation. This robust API manages user aut
 - **Google-Style JSON Responses:** Consistently formatted responses. 📁
 - **MySQL Database with TypeORM and Migrations:** Robust database management. 🗄️
 - **Mock Data Generation:** Realistic data generation with Faker.js. 🤖
+- **JWT Authentication:** Secure API endpoints with JSON Web Tokens. 🔑
+- **Error Handling:** Custom error middleware for handling common API errors. 📝
+
+## Live Deployment 📡
+
+Try out the API at:
+
+> [https://tattoo-booking-api-production.up.railway.app/api](https://tattoo-booking-api-production.up.railway.app/api)
 
 ## Installation 🚀
 
@@ -64,7 +73,10 @@ You'll need add a `.env` based on the provided `.env.example` file with the data
 
 ## API Documentation 📘
 
-Access the Swagger documentation at `http://localhost:3000/api-docs`.
+Access the Swagger documentation at:
+
+- Development: [http://localhost:3000/api-docs](http://localhost:3000/api-docs)
+- Production: [https://tattoo-booking-api-production.up.railway.app/api-docs](https://tattoo-booking-api-production.up.railway.app/api-docs)
 
 ## Database Design 📖
 
