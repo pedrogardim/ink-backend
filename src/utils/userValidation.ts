@@ -2,7 +2,8 @@ import { UserData, LoginPayload } from "../types/users";
 
 const NAME_REGEX = /^[a-zA-Z\u00C0-\u017F ]+$/;
 const EMAIL_REGEX = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
-const PASSWORD_REGEX = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,20}$/;
+const PASSWORD_REGEX =
+  /^(?=.*[A-Za-z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?])([A-Za-z\d!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]){6,20}$/;
 const PHONE_NUMBER_REGEX = /^[0-9]{9}$/;
 const URL_REGEX =
   /^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/;
