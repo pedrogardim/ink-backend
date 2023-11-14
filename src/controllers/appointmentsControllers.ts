@@ -27,7 +27,8 @@ export const getAppointmentById = async (
 
 export const getAppointments = async (
   query: AppointmentQuery,
-  user?: CurrentUserData
+  user?: CurrentUserData,
+  order?: { [key: string]: "ASC" | "DESC" }
 ) => {
   let { pageSize = 10, page = 1 } = query;
   pageSize = parseInt(pageSize as string);
@@ -48,6 +49,7 @@ export const getAppointments = async (
       client: true,
       tattooist: true,
     },
+    order: order || {},
     skip: (page - 1) * pageSize,
   });
 
