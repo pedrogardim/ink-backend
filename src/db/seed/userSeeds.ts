@@ -15,7 +15,7 @@ export const seedUsers = async () => {
         firstName: faker.person.firstName(),
         lastName: faker.person.lastName(),
         phoneNumber: faker.number.int({ min: 3e8, max: 9e8 }),
-        profilePicUrl: faker.image.avatarLegacy(),
+        profilePicUrl: faker.image.avatar(),
         role: faker.helpers.arrayElement(randomRoles),
       })
     );
