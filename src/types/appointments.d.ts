@@ -13,4 +13,6 @@ export interface AppointmentData {
   updatedAt?: Date;
 }
 
-export interface AppointmentQuery extends PaginationQuery, AppointmentData {}
+export interface AppointmentQuery extends PaginationQuery, AppointmentData {
+  date?: string;
+}
