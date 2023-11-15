@@ -15,7 +15,10 @@ export const seedUsers = async () => {
         firstName: faker.person.firstName(),
         lastName: faker.person.lastName(),
         phoneNumber: faker.number.int({ min: 3e8, max: 9e8 }),
-        profilePicUrl: faker.image.avatar(),
+        profilePicUrl: `https://robohash.org/${faker.number.int({
+          min: 0,
+          max: 1e8,
+        })}?size=64x64.png`,
         role: faker.helpers.arrayElement(randomRoles),
       })
     );
