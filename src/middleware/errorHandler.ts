@@ -19,5 +19,6 @@ export const errorHandler: ErrorRequestHandler = (err, req, res, next) => {
     error.code = 500;
   }
   const { message, code } = error;
+  console.log({ message, code });
   res.status(code).json({ error: { message, code } });
 };
