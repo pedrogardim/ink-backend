@@ -4,6 +4,7 @@ import { formatPaginationResponse, formatUser } from "../utils/format";
 import { validateUserData } from "../utils/userValidation";
 import { UserQuery, UserData } from "../types/users";
 import { ControllerOptions } from "../types/controllers";
+import { Like } from "typeorm";
 
 //Admin CRUD
 export const getUserById = async (id: number) => {
@@ -16,15 +17,15 @@ export const getUsers = async (
   query: UserQuery,
   options?: ControllerOptions
 ) => {
-  let { pageSize = 10, page = 1 } = query;
+  let { pageSize = 10, page = 1, search } = query;
   pageSize = parseInt(pageSize as string);
   page = parseInt(page as string);
 
-  delete query.pageSize;
-  delete query.page;
-
   const [users, totalItems] = await User.findAndCount({
-    where: query,
+    where: [
+      { firstName: Like(`%${search}%`) },
+      { lastName: Like(`%${search}%`) },
+    ],
     take: pageSize,
     skip: (page - 1) * pageSize,
   });
