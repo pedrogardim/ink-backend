@@ -30,7 +30,7 @@ export class TattooWork extends BaseEntity {
   @Column({ name: "tattooist_id" })
   tattooistId: number;
 
-  @ManyToOne(() => User, (user) => user.works, { onDelete: "CASCADE" })
+  @ManyToOne(() => User, (user) => user.tattooWorks, { onDelete: "CASCADE" })
   @JoinColumn({ name: "tattooist_id" })
   tattooist: User;
 
