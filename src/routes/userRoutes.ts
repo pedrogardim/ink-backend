@@ -65,7 +65,18 @@ router.delete("/me", async (req, res) => {
 });
 
 router.get("/getTattooists", async (req, res) => {
-  const users = await getUsers(req.query, { routePrefix: "/getTattooists/" });
+  const users = await getUsers(
+    { ...req.query, role: "tattooist" },
+    { routePrefix: "/getTattooists/" }
+  );
+  res.status(200).json(users);
+});
+
+//TODO: DOCUMENTATION
+router.get("/getTattooist/:id", async (req, res) => {
+  const users = await getUserById(parseInt(req.params.id), {
+    role: "tattooist",
+  });
   res.status(200).json(users);
 });
 
