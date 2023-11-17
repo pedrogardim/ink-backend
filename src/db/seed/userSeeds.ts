@@ -18,7 +18,7 @@ export const seedUsers = async () => {
         profilePicUrl: `https://robohash.org/${faker.number.int({
           min: 0,
           max: 1e8,
-        })}?size=64x64.png`,
+        })}.png?size=64x64`,
         role: faker.helpers.arrayElement(randomRoles),
       })
     );
