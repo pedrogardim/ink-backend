@@ -4,7 +4,6 @@ import { formatPaginationResponse, formatUser } from "../utils/format";
 import { validateUserData } from "../utils/userValidation";
 import { UserQuery, UserData } from "../types/users";
 import { ControllerOptions } from "../types/controllers";
-import { Like } from "typeorm";
 
 //Admin CRUD
 export const getUserById = async (id: number, query?: UserQuery) => {
@@ -21,18 +20,29 @@ export const getUsers = async (
   query: UserQuery,
   options?: ControllerOptions
 ) => {
-  let { pageSize = 10, page = 1, search } = query;
+  let { pageSize = 10, page = 1, search, role, joinTattooWorks } = query;
   pageSize = parseInt(pageSize as string);
   page = parseInt(page as string);
 
-  const [users, totalItems] = await User.findAndCount({
-    where: [
-      { firstName: Like(`%${search}%`) },
-      { lastName: Like(`%${search}%`) },
-    ],
-    take: pageSize,
-    skip: (page - 1) * pageSize,
-  });
+  const queryBuilder = User.createQueryBuilder("user");
+
+  if (joinTattooWorks) {
+    queryBuilder
+      .leftJoinAndSelect("user.tattooWorks", "tattooWorks")
+      .where("tattooWorks.tattooist_id IS NOT NULL");
+  }
+
+  if (search) {
+    queryBuilder.andWhere(
+      "(user.firstName LIKE :search OR user.lastName LIKE :search)",
+      { search: `%${search}%` }
+    );
+  }
+
+  const [users, totalItems] = await queryBuilder
+    .take(pageSize)
+    .skip((page - 1) * pageSize)
+    .getManyAndCount();
 
   return formatPaginationResponse({
     page,
