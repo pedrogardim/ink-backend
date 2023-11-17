@@ -7,8 +7,12 @@ import { ControllerOptions } from "../types/controllers";
 import { Like } from "typeorm";
 
 //Admin CRUD
-export const getUserById = async (id: number) => {
-  const user = await User.findOneBy({ id });
+export const getUserById = async (id: number, query?: UserQuery) => {
+  console.log({ id, ...(query && query) });
+  const user = await User.findOne({
+    where: { id, ...(query && query) },
+    relations: query?.role === "tattooist" ? ["tattooWorks"] : [],
+  });
   if (!user) throw { code: 404, message: "User not found" };
   return { data: formatUser(user) };
 };
