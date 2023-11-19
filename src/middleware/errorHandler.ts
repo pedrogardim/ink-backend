@@ -8,16 +8,27 @@ const typeOrmErrorsMap = {
     message: "Either the client or the tattoist does not exist",
     code: 409,
   },
+  TokenExpiredError: {
+    message: "Session token expired",
+    code: 401,
+  },
+  JsonWebTokenError: {
+    message: "User is not authenticated",
+    code: 401,
+  },
 };
 
 export const errorHandler: ErrorRequestHandler = (err, req, res, next) => {
   let error = err;
-  if (Object.keys(typeOrmErrorsMap).includes(err.code)) {
-    error = typeOrmErrorsMap[err.code as keyof typeof typeOrmErrorsMap];
+  console.log(JSON.stringify(err));
+  if (Object.keys(typeOrmErrorsMap).includes(err.code || err.name)) {
+    error =
+      typeOrmErrorsMap[(err.code || err.name) as keyof typeof typeOrmErrorsMap];
   }
   if (!error.code || typeof error.code !== "number") {
     error.code = 500;
   }
   const { message, code } = error;
+  console.log({ message, code });
   res.status(code).json({ error: { message, code } });
 };

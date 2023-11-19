@@ -20,7 +20,7 @@ app.use(express.json());
 app.use(morgan("dev"));
 
 app.use("/api/auth", authRouter);
-app.use("/api/users", auth, userRouter);
+app.use("/api/users", userRouter);
 app.use("/api/appointments", auth, appointmentsRouter);
 app.use("/api/tattooWorks", tattooWorksRouter);
 app.use("/api-docs", docsRouter);

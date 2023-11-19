@@ -11,11 +11,14 @@ export const seedUsers = async () => {
     .map(() =>
       User.create({
         email: faker.internet.email().toLowerCase(),
-        password: bcrypt.hashSync("1234", 1),
+        password: bcrypt.hashSync("abc12345$", 1),
         firstName: faker.person.firstName(),
         lastName: faker.person.lastName(),
         phoneNumber: faker.number.int({ min: 3e8, max: 9e8 }),
-        profilePicUrl: faker.image.avatarLegacy(),
+        profilePicUrl: `https://robohash.org/${faker.number.int({
+          min: 0,
+          max: 1e8,
+        })}.png?size=64x64`,
         role: faker.helpers.arrayElement(randomRoles),
       })
     );
