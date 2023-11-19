@@ -24,4 +24,7 @@ export interface RegisterPayload extends LoginPayload {
   phoneNumber: string;
 }
 
-export interface UserQuery extends PaginationQuery, UserData {}
+export interface UserQuery extends PaginationQuery, UserData {
+  search?: string;
+  joinTattooWorks?: true;
+}

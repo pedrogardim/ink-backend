@@ -6,8 +6,12 @@ import { UserQuery, UserData } from "../types/users";
 import { ControllerOptions } from "../types/controllers";
 
 //Admin CRUD
-export const getUserById = async (id: number) => {
-  const user = await User.findOneBy({ id });
+export const getUserById = async (id: number, query?: UserQuery) => {
+  console.log({ id, ...(query && query) });
+  const user = await User.findOne({
+    where: { id, ...(query && query) },
+    relations: query?.role === "tattooist" ? ["tattooWorks"] : [],
+  });
   if (!user) throw { code: 404, message: "User not found" };
   return { data: formatUser(user) };
 };
@@ -16,18 +20,29 @@ export const getUsers = async (
   query: UserQuery,
   options?: ControllerOptions
 ) => {
-  let { pageSize = 10, page = 1 } = query;
+  let { pageSize = 10, page = 1, search, role, joinTattooWorks } = query;
   pageSize = parseInt(pageSize as string);
   page = parseInt(page as string);
 
-  delete query.pageSize;
-  delete query.page;
+  const queryBuilder = User.createQueryBuilder("user");
 
-  const [users, totalItems] = await User.findAndCount({
-    where: query,
-    take: pageSize,
-    skip: (page - 1) * pageSize,
-  });
+  if (joinTattooWorks) {
+    queryBuilder
+      .leftJoinAndSelect("user.tattooWorks", "tattooWorks")
+      .where("tattooWorks.tattooist_id IS NOT NULL");
+  }
+
+  if (search) {
+    queryBuilder.andWhere(
+      "(user.firstName LIKE :search OR user.lastName LIKE :search OR user.email LIKE :search OR user.id LIKE :search)",
+      { search: `%${search}%` }
+    );
+  }
+
+  const [users, totalItems] = await queryBuilder
+    .take(pageSize)
+    .skip((page - 1) * pageSize)
+    .getManyAndCount();
 
   return formatPaginationResponse({
     page,

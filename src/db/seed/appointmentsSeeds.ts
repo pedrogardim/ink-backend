@@ -1,6 +1,7 @@
+import { fakerES as faker } from "@faker-js/faker";
+import dayjs from "dayjs";
 import { Appointment, AppointmentType } from "../../models/Appointment";
 import { User } from "../../models/User";
-import { fakerES as faker } from "@faker-js/faker";
 
 export const seedAppointments = async (users: User[]) => {
   const randomTypes = ["tattoo", "piercing"] as AppointmentType[];
@@ -13,12 +14,17 @@ export const seedAppointments = async (users: User[]) => {
   const appointments = Array(50)
     .fill(null)
     .map(() => {
-      const startTime = faker.date.future({});
-      const endTime = new Date(
-        new Date(startTime).setHours(
-          startTime.getHours() + faker.number.int({ min: 1, max: 6 })
-        )
-      );
+      const startTime = dayjs(0)
+        .set("year", 2023)
+        .set("months", faker.number.int({ min: 0, max: 12 }))
+        .set("days", faker.number.int({ min: 0, max: 30 }))
+        .set("hours", faker.number.int({ min: 9, max: 21 }))
+        .set("minutes", faker.number.int({ min: 0, max: 12 }) * 5)
+        .toDate();
+      const endTime = dayjs(startTime)
+        .clone()
+        .add(faker.number.int({ min: 0, max: 12 }) * 10, "minutes")
+        .toDate();
 
       return Appointment.create({
         description: faker.lorem.text().slice(0, 256),

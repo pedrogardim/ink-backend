@@ -73,7 +73,7 @@ export class User extends BaseEntity {
     onDelete: "CASCADE",
   })
   @JoinColumn({ name: "tattooist_id" })
-  works: TattooWork[];
+  tattooWorks: TattooWork[];
 
   @CreateDateColumn({
     name: "created_at",

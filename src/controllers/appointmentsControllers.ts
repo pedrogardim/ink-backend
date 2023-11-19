@@ -3,6 +3,7 @@ import { formatPaginationResponse, formatAppointment } from "../utils/format";
 import { validateAppointment } from "../utils/appointmentValidation";
 import { AppointmentData, AppointmentQuery } from "../types/appointments";
 import { CurrentUserData } from "../types";
+import { LessThanOrEqual, MoreThanOrEqual } from "typeorm";
 
 export const getAppointmentById = async (
   id: number,
@@ -27,27 +28,29 @@ export const getAppointmentById = async (
 
 export const getAppointments = async (
   query: AppointmentQuery,
-  user?: CurrentUserData
+  user?: CurrentUserData,
+  order?: { [key: string]: "ASC" | "DESC" }
 ) => {
-  let { pageSize = 10, page = 1 } = query;
+  let { pageSize = 10, page = 1, date } = query;
   pageSize = parseInt(pageSize as string);
   page = parseInt(page as string);
 
-  delete query.page;
-  delete query.pageSize;
-
-  if (user) {
-    const { role, userId } = user;
-    query[role === "tattooist" ? "tattooistId" : "clientId"] = userId;
-  }
-
   const [appointments, totalItems] = await Appointment.findAndCount({
-    where: query,
+    where: {
+      ...(date && {
+        startTime: MoreThanOrEqual(new Date(+date)),
+        endTime: LessThanOrEqual(new Date(+date + 86400000)),
+      }),
+      ...(user && {
+        [user.role === "tattooist" ? "tattooistId" : "clientId"]: user.userId,
+      }),
+    },
     take: pageSize,
     relations: {
       client: true,
       tattooist: true,
     },
+    order: order || {},
     skip: (page - 1) * pageSize,
   });
 

@@ -12,7 +12,9 @@ const router = express.Router();
 
 // User operations
 router.get("/my", async (req, res) => {
-  const appointments = await getAppointments(req.query, req.currentUser);
+  const appointments = await getAppointments(req.query, req.currentUser, {
+    startTime: "ASC",
+  });
   res.status(200).json(appointments);
 });
 
