@@ -28,7 +28,7 @@ export const getTattooWorks = async (
 
   const [tattooWorks, totalItems] = await TattooWork.findAndCount({
     relations: ["tattooist"],
-    where: query,
+    // where: query,
     take: pageSize,
     skip: (page - 1) * pageSize,
   });

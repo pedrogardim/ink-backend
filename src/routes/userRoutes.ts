@@ -7,6 +7,7 @@ import {
   deleteUser,
 } from "../controllers/usersControllers";
 import { roleCheck } from "../middleware/roleCheck";
+import { auth } from "../middleware/auth";
 
 const router = express.Router();
 
@@ -46,23 +47,28 @@ adminRouter.put("/setAsTattooist/:id", async (req, res, next) => {
 });
 
 //User
-router.get("/me", async (req, res) => {
+
+const myProfileRouter = express.Router();
+
+myProfileRouter.get("/me", async (req, res) => {
   const { userId } = req.currentUser;
   const user = await getUserById(userId);
   res.status(200).json(user);
 });
 
-router.put("/me", async (req, res) => {
+myProfileRouter.put("/me", async (req, res) => {
   const { userId } = req.currentUser;
   const user = await updateUser(userId, req.body);
   res.status(200).json(user);
 });
 
-router.delete("/me", async (req, res) => {
+myProfileRouter.delete("/me", async (req, res) => {
   const { userId } = req.currentUser;
   const userDeleted = await deleteUser(userId);
   res.status(204).json(userDeleted);
 });
+
+//public user routes
 
 router.get("/getTattooists", async (req, res) => {
   const users = await getUsers(
@@ -80,6 +86,7 @@ router.get("/getTattooist/:id", async (req, res) => {
   res.status(200).json(users);
 });
 
-router.use("/", adminRouter);
+router.use("/", auth, adminRouter);
+router.use("/", auth, myProfileRouter);
 
 export default router;
