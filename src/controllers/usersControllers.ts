@@ -34,7 +34,7 @@ export const getUsers = async (
 
   if (search) {
     queryBuilder.andWhere(
-      "(user.firstName LIKE :search OR user.lastName LIKE :search)",
+      "(user.firstName LIKE :search OR user.lastName LIKE :search OR user.email LIKE :search OR user.id LIKE :search)",
       { search: `%${search}%` }
     );
   }
